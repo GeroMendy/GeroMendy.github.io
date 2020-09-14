@@ -1,0 +1,42 @@
+#js-image_upload_input{
+    display: none;
+}
+#js-canvas{
+    border-radius: 8px;
+    background-image: url("../img/transparencia.jpg");
+    float: left;
+    margin-bottom: 2%;
+    border: solid #323278FF;
+}
+#js-paint_toolbar{
+    overflow: auto;
+    height: fit-content;
+    width: 97%;
+    margin: 1%;
+    padding: 0.2%;
+    background-color: #aaf;
+    color: #115;
+}
+.toolbar_section{
+    margin: 0 0.2%;
+    float: left;
+    width: fit-content;
+    padding: 0.5%;
+    background-color: #add;
+}
+.toolbar_title{
+    margin: 0 15px;
+    float: left;
+    color: inherit;
+    font-size: 18px;
+}
+.button_next_to_canvas{
+    float: left;
+    clear: both;
+    margin: 0.2%;
+}
+
+
+.hidden{
+    display: none;
+}
