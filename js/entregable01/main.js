@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let new_alpha = imageData[byte + 3];
 
                 let pixel_hsl = rgbToHsl(new_red, new_green, new_blue);
-                pixel_hsl[2] *= 1.2;
+                pixel_hsl[2] *= brillo;
                 let new_pixel_RGBA = hslToRgb(pixel_hsl[0], pixel_hsl[1], pixel_hsl[2]);
                 new_pixel_RGBA[3] = new_alpha;
 
@@ -309,19 +309,31 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
 
+                let current_byte = ((x + (y * width)) * 4);
                 let rgba_values = [0, 0, 0, 0];
-                let bytes = getBloqueDeBytesCercanos(x, y, width, height, rango_blur);
+                rgba_values[3] = imageData[current_byte + 3];
+                let cant_bytes_considerados = 1;
+                if (rgba_values[3] > 0) {
+                    cant_bytes_considerados = 0;
+                    let bytes = getBloqueDeBytesCercanos(x, y, width, height, rango_blur);
+                    bytes.forEach(byte => {
 
-                bytes.forEach(byte => {
-                    rgba_values[0] += imageData[byte];
-                    rgba_values[1] += imageData[byte + 1];
-                    rgba_values[2] += imageData[byte + 2];
-                });
+                        //Ignora los bytes completamente transparentes.
+                        if (imageData[byte + 3] > 0) {
 
-                rgba_values[0] /= bytes.length;
-                rgba_values[1] /= bytes.length;
-                rgba_values[2] /= bytes.length;
-                rgba_values[3] = imageData[((x + (y * width)) * 4) + 3]
+                            rgba_values[0] += imageData[byte];
+                            rgba_values[1] += imageData[byte + 1];
+                            rgba_values[2] += imageData[byte + 2];
+                            cant_bytes_considerados++;
+                        }
+                    });
+
+                }
+
+                rgba_values[0] /= cant_bytes_considerados;
+                rgba_values[1] /= cant_bytes_considerados;
+                rgba_values[2] /= cant_bytes_considerados;
+                rgba_values[3] = imageData[current_byte + 3]
 
                 setPixel(imageData, width, x, y, rgba_values);
             }
@@ -363,20 +375,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function getPromedioImagen(imageData, width, height) {
         let values_RGB = [0, 0, 0];
+        let cant_bytes_considerados = 0;
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 let byte = (x + (y * width)) * 4;
-                // let real_value = 255/imageData[byte+3];
 
-                values_RGB[0] += imageData[byte];
-                values_RGB[1] += imageData[byte + 1];
-                values_RGB[2] += imageData[byte + 2];
+                //Ignora los pixeles completamente transparentes
+                if (imageData[byte + 3] > 0) {
+
+                    values_RGB[0] += imageData[byte];
+                    values_RGB[1] += imageData[byte + 1];
+                    values_RGB[2] += imageData[byte + 2];
+                    cant_bytes_considerados++;
+                }
             }
         }
-        values_RGB[0] = values_RGB[0] / (width * height);
-        values_RGB[1] = values_RGB[1] / (width * height);
-        values_RGB[2] = values_RGB[2] / (width * height);
+        if (cant_bytes_considerados > 0) {
 
+            values_RGB[0] = values_RGB[0] / cant_bytes_considerados;
+            values_RGB[1] = values_RGB[1] / cant_bytes_considerados;
+            values_RGB[2] = values_RGB[2] / cant_bytes_considerados;
+
+        }
         return values_RGB;
 
     }
@@ -504,7 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
         aplicarFiltroBlur(imageData.data, canvas.width, canvas.height, rango_blur);
         ctx.putImageData(imageData, 0, 0);
     });
-    
+
     document.querySelector("#js-download_button").addEventListener("click", downloadCanvasAsImage);
 
 });

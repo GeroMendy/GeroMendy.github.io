@@ -5,83 +5,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TP1 - Ejercicio Entregable</title>
-    <link rel="stylesheet" href="../css/master.css">
+    <link rel="stylesheet" href="../css/entregable01/master.css">
 </head>
 
 <body>
-
-    <div id="js-paint_toolbar">
-        <div class="toolbar_section">
-            <input type="radio" name="current_tool" class="js-toolbar_item">
-            <label for="">Mouse</label>
-            <input type="radio" name="current_tool" class="js-toolbar_item">
-            <label for="">L&aacutepiz</label>
-            <input type="radio" name="current_tool" class="js-toolbar_item">
-            <label for="">Goma</label>
-        </div>
-        <div class="toolbar_section">
-            <h2 class="toolbar_title">Filtros:</h2>
-            <button class="js-filtro">
-                Negativo
-            </button>
-            <button class="js-filtro">
-                Brillo
-            </button>
-            <button class="js-filtro">
-                Binarizaci&oacuten
-            </button>
-            <button class="js-filtro">
-                Sepia
-            </button>
-            <button class="js-filtro">
-                Saturaci&oacuten
-            </button>
-            <button class="js-filtro">
-                Blur
-            </button>
-
+    <div id="main_article">
+        <img src="../img/entregable01/imagen_muestra/imagen_muestra.jpg" alt="">
+        <div class="main_article_text">
+            <p>
+                Para el ejercicio entregable del pr&aacutectico 1 se pidi&oacute una aplicaci&oacuten similar a 'paint'
+                con herramienta de l&aacutepiz, goma,
+                y con la posibilidad de cargar una imagen y aplicarle distintos filtros</br>
+                A continuaci&oacuten se muestran los filtros aplicados a una imagen de ejemplo y se explica como se
+                logr&oacute el efecto de estos filtros</br>
+                Los filtros utilizados son los siguientes:</br>
+            <ul>
+                <li>Negativo</li>
+                <li>Brillo</li>
+                <li>binarizaci&oacuten</li>
+                <li>Sepia</li>
+                <li>Saturaci&oacuten</li>
+                <li>'Blur'</li>
+            </ul>
+            </p>
+            <p>
+                por &uacuteltimo, se encuentra la aplicaci&oacuten como 'paint' descrita
+            </p>
         </div>
     </div>
 
-    <canvas id="js-canvas" width="800" height="600"></canvas>
-
-    <div class="js-hidden_filter_menu" id="js-menu_filtro_binarizacion" class="hidden">
-        <label for="colorA">Elija el color para los 'oscuros'</label>
-        <input class="js-color_filtro_binarizacion" name="colorA" type="color" value="#000000">
-        <br>
-        <label for="colorB">Elija el color para los 'claros'</label>
-        <input class="js-color_filtro_binarizacion" name="colorB" type="color" value="#FFFFFF">
-        <br>
-        <label for="luminosidad">Elija el valor utilizado como limite*</label>
-        <input id="js-input_luminosidad_filtro_binario" type="number" min="0" max="255">
-        <br>
-        <p>*en caso de dejar vacío, se utiliza el valor promedio como limite</p>
-        <button id="js-boton_confirmar_binarizacion">Aplicar Filtro</button>
+    <div class="articulo">
+        <img src="../img/entregable01/imagen_muestra/negativo.png" alt="">
+        <p>Negativo: Se obtiene mediante la ecuaci&oacuten (255 - valorRGB) por cada byte de cada pixel</p>
     </div>
-    <div class="js-hidden_filter_menu" id="js-menu_filtro_saturacion" class="hidden">
-        <label for="saturacion">Elija el porcentaje de saturaci&oacuten a aplicar*</label>
-        <input id="js-valor_saturacion_filtro_saturacion" name="colorA" type="number" min="-80" max="400" value="20">
-        <p>*para reducir la saturcaion, introduzca un valor negativo</p>
-        <br>
-        <button id="js-boton_confirmar_saturacion">Aplicar Filtro</button>
+    <div class="articulo">
+        <img src="../img/entregable01/imagen_muestra/brillo.png" alt="">
+        <p>Brillo: Se obtiene pasando el valor del pixel de RGB a HSL y aumentando el valor 'L' (en este caso un 20%
+            m&aacutes)</p>
     </div>
-    <div class="js-hidden_filter_menu" id="js-menu_filtro_blur" class="hidden">
-        <label for="blur">Elija el rango de pixeles a difuminar*</label>
-        <input id="js-rango_pixeles_filtro_blur" name="rango_blur" type="number" min="0" max="10" value="3">
-        <br>
-        <button id="js-boton_confirmar_blur">Aplicar Filtro</button>
+    <div class="articulo">
+        <img src="../img/entregable01/imagen_muestra/binarizacion.png" alt="">
+        <p>binarizaci&oacuten: La funci&oacuten recibe un valor x (en este caso, 'x' se obtiene promediando la imagen
+            completa), y luego transformando todos los pixeles menores a x en un color (negro), y los mayores en otro
+            (blanco)</p>
+    </div>
+    <div class="articulo">
+        <img src="../img/entregable01/imagen_muestra/sepia.png" alt="">
+        <p>Sepia: Se obtiene transformando los valores rgb con la siguiente regla:</br>
+            R = (R * 0.393) + (G * 0.769) + (B * 0.189)</br>
+            G = (R * 0.349) + (G * 0.686) + (B * 0.168)</br>
+            B = (R * 0.272) + (G * 0.534) + (B * 0.131)</p>
+    </div>
+    <div class="articulo">
+        <img src="../img/entregable01/imagen_muestra/saturacion.png" alt="">
+        <p>Saturaci&oacuten: Se obtiene pasando el valor del pixel de RGB a HSL y aumentando el valor 'S' (en este caso un 20%
+            m&aacutes)</p>
+    </div>
+    <div class="articulo">
+        <img src="../img/entregable01/imagen_muestra/blur.png" alt="">
+        <p>Blur: Se obtiene calculando para canda pixel el promedio de los pixeles cercanos, dentro de un rango recibido por par&acutemetro (en este caso 3)</p>
     </div>
 
-    <button class="button_next_to_canvas" id="js-new_canvas">Nuevo canvas</button>
-    <button class="button_next_to_canvas" id="js-image_upload_button">Seleccionar imagen</button>
-    <button class="button_next_to_canvas" id="js-reset_image" disabled="true">Deshacer cambios en imagen</button>
-    <a href="#" class="button_next_to_canvas" id="js-download_button" download="mi_dibujo.png">Guardar imagen</a>
-    <input type="file" id="js-image_upload_input" accept="image/png, image/jpeg, image/bmp">
+    <div id="paint">
 
+        <div id="js-paint_toolbar">
+            <div class="toolbar_section" id="toolbar_file_section">
 
-    <script type="text/javascript" src="../js/color_converter.js"></script>
-    <script type="text/javascript" src="../js/main.js"></script>
-    <script type="text/javascript" src="../js/tool_lapiz.js"></script>
+                <img alt="Crear canvas vacío" class="img_button_toolbar_file_option" id="js-new_canvas" src="../img/entregable01/new_canvas.svg">
+                <img class="img_button_toolbar_file_option" id="js-image_upload_button"
+                    src="../img/entregable01/upload_image.svg">
+                <img class="img_button_toolbar_file_option" id="js-reset_image" disabled="true"
+                    src="../img/entregable01/undone_image_changes.svg">
+
+            </div>
+            <div class="toolbar_section">
+                <input type="radio" name="current_tool" class="js-toolbar_item toolbar_section_align">
+                <label for="">Mouse</label>
+                <input type="radio" name="current_tool" class="js-toolbar_item toolbar_section_align">
+                <label for="">L&aacutepiz</label>
+                <input type="radio" name="current_tool" class="js-toolbar_item toolbar_section_align">
+                <label for="">Goma</label>
+            </div>
+            <div class="toolbar_section">
+                <h2 class="toolbar_title">Filtros:</h2>
+                <button class="js-filtro toolbar_section_align">
+                    Negativo
+                </button>
+                <button class="js-filtro toolbar_section_align">
+                    Brillo
+                </button>
+                <button class="js-filtro toolbar_section_align">
+                    Binarizaci&oacuten
+                </button>
+                <button class="js-filtro toolbar_section_align">
+                    Sepia
+                </button>
+                <button class="js-filtro toolbar_section_align">
+                    Saturaci&oacuten
+                </button>
+                <button class="js-filtro toolbar_section_align">
+                    Blur
+                </button>
+
+            </div>
+            <div class="toolbar_section">
+
+                <a href="#" class="toolbar_section_align" id="js-download_button"
+                    download="mi_dibujo.png"><button>Guardar imagen</button></a>
+                <input type="file" id="js-image_upload_input" accept="image/png, image/jpeg, image/bmp">
+            </div>
+        </div>
+
+        <canvas id="js-canvas" width="800" height="600"></canvas>
+
+        <div class="js-hidden_filter_menu" id="js-menu_filtro_binarizacion" class="hidden">
+            <div class="hidden_filter_menu_section">
+                <label for="colorA">Elija el color para los 'oscuros'</label>
+                <input class="js-color_filtro_binarizacion" name="colorA" type="color" value="#000000">
+            </div>
+            <div class="hidden_filter_menu_section">
+                <label for="colorB">Elija el color para los 'claros'</label>
+                <input class="js-color_filtro_binarizacion" name="colorB" type="color" value="#FFFFFF">
+            </div>
+            <div class="hidden_filter_menu_section">
+                <label for="luminosidad">Elija el valor utilizado como limite*</label>
+                <input id="js-input_luminosidad_filtro_binario" type="number" min="0" max="255">
+            </div>
+            <p>*en caso de dejar vacío, se utiliza el valor promedio como limite</p>
+            <button class="boton_confirmar" id="js-boton_confirmar_binarizacion">Aplicar Filtro</button>
+        </div>
+        <div class="js-hidden_filter_menu" id="js-menu_filtro_saturacion" class="hidden">
+            <div class="hidden_filter_menu_section">
+                <label for="saturacion">Elija el porcentaje de saturaci&oacuten a aplicar*</label>
+                <input id="js-valor_saturacion_filtro_saturacion" name="colorA" type="number" min="-80" max="400"
+                    value="20">
+            </div>
+            <p>*para reducir la saturcaion, introduzca un valor negativo</p>
+            <button class="boton_confirmar" id="js-boton_confirmar_saturacion">Aplicar Filtro</button>
+        </div>
+        <div class="js-hidden_filter_menu" id="js-menu_filtro_blur" class="hidden">
+            <div class="hidden_filter_menu_section">
+                <label for="blur">Elija el rango de pixeles a difuminar*</label>
+                <input id="js-rango_pixeles_filtro_blur" name="rango_blur" type="number" min="0" max="10" value="3">
+            </div>
+            <button class="boton_confirmar" id="js-boton_confirmar_blur">Aplicar Filtro</button>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="../js/entregable01/color_converter.js"></script>
+    <script type="text/javascript" src="../js/entregable01/main.js"></script>
+    <script type="text/javascript" src="../js/entregable01/tool_lapiz.js"></script>
 </body>
 
 </html>
