@@ -1,18 +1,19 @@
-class Token {
+class Ficha {
 
     context;
     posX; posY;
     radio;
-    stroke;
-    fill;
+    fondo;
+    imagen;
     jugador;
 
-    constructor(context, posX = 25, posY = 25, radio = 25, fill = "#FFFFFFFF", stroke = "#000000FF", jugador = 0) {
+    constructor(context, posX = 25, posY = 25, radio = 25, fondo = "#FFFFFFFF", imagen = null, jugador = 0) {
         this.context = context;
         this.posX = posX;
         this.posY = posY;
         this.radio = radio;
-        this.fill = fill;
+        this.fondo = fondo;
+        this.imagen = imagen;
         this.jugador = jugador;
     }
 
@@ -25,11 +26,11 @@ class Token {
     setRadio(new_radio = this.radio) {
         this.radio = new_radio;
     }
-    setFill(new_fill = this.fill) {
-        this.fill = new_fill;
+    setFondo(new_fondo = this.fondo) {
+        this.fondo = new_fondo;
     }
-    setStroke(new_stroke = this.stroke) {
-        this.stroke = new_stroke;
+    setImagen(new_imagen = this.imagen) {
+        this.imagen = new_imagen;
     }
     setJugador(jugador) {
         this.jugador = jugador;
@@ -47,11 +48,11 @@ class Token {
     getRadio() {
         return this.radio;
     }
-    getFill() {
-        return this.fill;
+    getFondo() {
+        return this.fondo;
     }
-    getStroke() {
-        return this.stroke;
+    getImagen() {
+        return this.imagen;
     }
     getJugador() {
         return this.jugador;
@@ -78,17 +79,17 @@ class Token {
     }
     draw() {
         let pos = this.getPosition();
+        let radio = this.getRadio();
+        let image_size = radio*2;
         this.context.beginPath();
         this.context.arc(pos.x, pos.y, this.getRadio(), 0, 2 * Math.PI);
         this.context.closePath();
 
-        this.context.fillStyle = this.fill;
-
-        this.context.strokeStyle = this.stroke;
-        this.context.lineWidth = "2";
+        this.context.fillStyle = this.fondo;
 
         this.context.fill();
-        this.context.stroke();
+        let imagen = this.getImagen();
+        if (imagen) this.context.drawImage(imagen, pos.x-radio, pos.y-radio, image_size, image_size);
     }
 
 }
