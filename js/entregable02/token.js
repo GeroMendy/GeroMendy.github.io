@@ -6,7 +6,6 @@ class Token {
     stroke;
     fill;
     jugador;
-    dibujado=false;
 
     constructor(context, posX = 25, posY = 25, radio = 25, fill = "#FFFFFFFF", stroke = "#000000FF", jugador = 0) {
         this.context = context;
@@ -35,9 +34,6 @@ class Token {
     setJugador(jugador) {
         this.jugador = jugador;
     }
-    setFichaBorrada(){
-        this.dibujado=false;
-    }
 
     /* Fin Setters */
     /* Getters: */
@@ -59,9 +55,6 @@ class Token {
     }
     getJugador() {
         return this.jugador;
-    }
-    estaDibujado(){
-        return this.dibujado;
     }
     /* Fin Getters */
 
@@ -96,7 +89,6 @@ class Token {
 
         this.context.fill();
         this.context.stroke();
-        this.dibujado=true;
     }
 
 }

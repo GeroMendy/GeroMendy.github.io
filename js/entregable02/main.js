@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let fichas_tablero = [];
     let jugador_1_fichas = [];
     let jugador_2_fichas = [];
+    let colliders_tablero = [];
     let current_player = -1;
     // let ultima_ficha_jugada = null;
 
@@ -49,9 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for (let y = 0; y < tablero_celdas_vertical; y++) {
             fichas_tablero[y] = [];
-            // for (let x = 0; x < tablero_celdas_horizontal; x++) {
-            //     fichas_tablero[y][x] = 0;
-            // }
+            for (let x = 0; x < tablero_celdas_horizontal; x++) {
+                fichas_tablero[y][x] = null;
+            }
         }
         //Cantidad de fichas a dibujar para cada jugador.
         let fichas_por_jugador = parseInt((tablero_celdas_horizontal * tablero_celdas_vertical) / 2);
@@ -101,7 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let color = getCurrentPlayerBackgroundColor();
         clearCanvas(color);
         for (let y = 0; y < tablero_celdas_vertical; y++) {
-            fichas_tablero[y] = [];
             for (let x = 0; x < tablero_celdas_horizontal; x++) {
                 let ficha = fichas_tablero[y][x];
                 if (ficha) {
@@ -112,10 +112,10 @@ document.addEventListener("DOMContentLoaded", () => {
         drawTablero();
 
         jugador_1_fichas.forEach(ficha => {
-            if (!ficha.estaDibujado()) ficha.draw();
+            ficha.draw();
         });
         jugador_2_fichas.forEach(ficha => {
-            if (!ficha.estaDibujado()) ficha.draw();
+            ficha.draw();
         });
     }
 
@@ -127,13 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         ctx.fillStyle = color;
         ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
-
-        jugador_1_fichas.forEach(ficha => {
-            ficha.setFichaBorrada();
-        });
-        jugador_2_fichas.forEach(ficha => {
-            ficha.setFichaBorrada();
-        });
 
     }
 
@@ -154,14 +147,21 @@ document.addEventListener("DOMContentLoaded", () => {
         //Obtiene la mitad del espacio que queda libre, para ubicar el tablero en el centro.
         let espacio_pixel_por_jugador = (window_width - (celda_pixel_size * tablero_celdas_horizontal)) / 2;
         ctx.beginPath();
-        for (let y = 0; y < tablero_celdas_vertical; y++) {
+        for (let y = -1; y < tablero_celdas_vertical; y++) {
             for (let x = 0; x < tablero_celdas_horizontal; x++) {
 
-                let rect_x = espacio_pixel_por_jugador + (x * celda_pixel_size);
+                let pos_x = espacio_pixel_por_jugador + (x * celda_pixel_size);
                 //Deja un espacio igual al tamaño de la celda para 'poner' la ficha
-                let rect_y = celda_pixel_size + (y * celda_pixel_size);
-
-                ctx.rect(rect_x, rect_y, celda_pixel_size, celda_pixel_size);
+                let pos_y = celda_pixel_size + (y * celda_pixel_size);
+                if (y < 0) {
+                    pos_x += celda_pixel_size / 4;
+                    pos_y += celda_pixel_size / 4;
+                    let col = new Collider(pos_x, pos_y, celda_pixel_size / 2, celda_pixel_size / 2);
+                    colliders_tablero[x] = col;
+                }
+                else {
+                    ctx.rect(pos_x, pos_y, celda_pixel_size, celda_pixel_size);
+                }
             }
         }
         ctx.stroke();
@@ -268,6 +268,46 @@ document.addEventListener("DOMContentLoaded", () => {
         ficha_arrastrada.setPosition(nuevo_x + distancia_desde_click_al_centro_de_ficha.x, nuevo_y + distancia_desde_click_al_centro_de_ficha.y);
         redrawAll();
     }
+    //Al soltar el mouse, revisa si la ficha fue dejada en el espacio libre para ser jugada.
+    function jugarFicha() {
+        let fueJugada = false;
+        if (ficha_arrastrada) {
+            let index = 0;
+            while (index < colliders_tablero.length && !fueJugada) {
+                fueJugada = colliders_tablero[index].isTokenInsideCollider(ficha_arrastrada);
+                index++;
+            }
+            if (fueJugada) {
+                let array_fichas = [];
+                index--;
+                switch (current_player) {
+                    case 1: array_fichas = jugador_1_fichas; break;
+                    case 2: array_fichas = jugador_2_fichas; break;
+                }
+                //Recorre la fila de la matriz de abajo hacia arriba para buscar el primer espacio libre.
+                let y = tablero_celdas_vertical - 1;
+                while (y >= 0) {
+                    if (fichas_tablero[y][index] == null) {
+                        eliminarObjetoEnArray(ficha_arrastrada, array_fichas);
+                        fichas_tablero[y][index] = ficha_arrastrada;
+                        cambiarJugadorActual();
+                        return;
+                    }
+                    y--;
+                }
+
+            }
+        }
+    }
+
+    function cambiarJugadorActual() {
+        switch (current_player) {
+            case 1: current_player++; break;
+            case 2: current_player--; break;
+        }
+        redrawAll();
+
+    }
 
 
     //Regresa un objeto con la posicion en canvas, ignorando el margen hasta el canvas.
@@ -278,6 +318,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return {
             x: canvas_x,
             y: canvas_y
+        }
+    }
+    function eliminarObjetoEnArray(objeto, array) {
+        let index = array.indexOf(objeto);
+        if (index > 0) {
+            array.splice(index, 1);
         }
     }
 
@@ -312,10 +358,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
     canvas.addEventListener("mouseup", () => {
+        //Si una ficha estaba siendo arrastrada, revisa si fue jugada al soltarla.
+        if (hay_ficha_en_movimiento) jugarFicha();
         hay_ficha_en_movimiento = false;
+        ficha_arrastrada = null;
     });
     canvas.addEventListener("mouseout", () => {
         hay_ficha_en_movimiento = false;
+        ficha_arrastrada = null;
     });
 
 
