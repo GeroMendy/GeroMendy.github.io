@@ -1,0 +1,18 @@
+
+#js-canvas_container{
+    width: 99.5%;
+    height: 700px;
+    overflow: hidden;
+    border: solid rgb(120, 220, 80);
+}
+#js-canvas{
+    margin: 0;
+}
+
+.hidden{
+    display: none;
+}
+.js-size_tablero, #js-change_size_tablero, #js-reset_game{
+    margin-top: 1%;
+    margin-right: 2%;
+}

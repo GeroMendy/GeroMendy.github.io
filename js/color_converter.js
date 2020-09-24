@@ -138,6 +138,7 @@ function hsvToRgb(h, s, v) {
 
   return [r * 255, g * 255, b * 255];
 }
+//Funciona también con RGBA.
 function hexaToRgb(hexa = "#FFFFFF") {
   let rgb = [];
   let number_a;
@@ -167,4 +168,27 @@ function hexaToRgb(hexa = "#FFFFFF") {
     rgb[((i - 1) / 2)] = (number_a * 16) + number_b
   }
   return rgb;
+}
+
+function rgbToHexa(r = 255, g = 255, b = 255, a = 255) {
+  let hexa = "#";
+  let rgba = [r, g, b, a];
+  let digitos = [];
+  rgba.forEach(byte => {
+    digitos[0] = Math.floor(byte / 16);
+    digitos[1] = byte % 16;
+    digitos.forEach(num => {
+
+      switch (num) {
+        case 10: num = 'A'; break;
+        case 11: num = 'B'; break;
+        case 12: num = 'C'; break;
+        case 13: num = 'D'; break;
+        case 14: num = 'E'; break;
+        case 15: num = 'F'; break;
+      }
+      hexa += num;
+    });
+  });
+  return hexa;
 }
