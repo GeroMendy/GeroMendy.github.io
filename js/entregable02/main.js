@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const URL_IMAGEN_FICHA = "../img/entregable02/ficha.png";
     const FICHAS_NECESARIAS_PARA_VICTORIA = 4;
     const TRANSPARENCIA_COLOR_FONDO = 0.4;
+    const COLOR_GANADOR = "#33FF55FF";
 
     let canvas = document.querySelector("#js-canvas");
     let ctx = canvas.getContext("2d");
@@ -71,19 +72,13 @@ document.addEventListener("DOMContentLoaded", () => {
         imagen.src = URL_IMAGEN_FICHA;
         imagen.onload = generarTodasLasFichas(imagen, fichas_por_jugador);
 
+        escribirTurnoActual();
+
     }
 
     function redrawAll() {
         let color = getCurrentPlayerBackgroundColor();
         clearCanvas(color);
-        for (let y = 0; y < tablero_celdas_vertical; y++) {
-            for (let x = 0; x < tablero_celdas_horizontal; x++) {
-                let ficha = casillas_tablero[y][x];
-                if (ficha) {
-                    ficha.draw();
-                }
-            }
-        }
         casillas_tablero.forEach(columna => {
             columna.forEach(casilla => {
                 casilla.draw();
@@ -96,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         jugador_2_fichas.forEach(ficha => {
             ficha.draw();
         });
+        escribirTurnoActual();
     }
 
     function clearCanvas(color = CANVAS_DEFAULT_COLOR) {
@@ -121,8 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let ficha = 0; ficha < fichas_por_jugador; ficha++) {
 
             //Coloca las fichas en una pila desde abajo hacia arriba.
-            let ficha_p1 = createFicha(ficha_radio + ditancia_entre_fichas_y_borde, window_height - ficha_radio - (ficha * 25) - ditancia_entre_fichas_y_borde, 1, imagen);
-            let ficha_p2 = createFicha(window_width - ficha_radio - ditancia_entre_fichas_y_borde, window_height - ficha_radio - (ficha * 25) - ditancia_entre_fichas_y_borde, 2, imagen);
+            let ficha_p1 = createFicha(ficha_radio + ditancia_entre_fichas_y_borde, window_height + ficha_radio - (ficha * 25) - ditancia_entre_fichas_y_borde, 1, imagen);
+            let ficha_p2 = createFicha(window_width - ficha_radio - ditancia_entre_fichas_y_borde, window_height + ficha_radio - (ficha * 25) - ditancia_entre_fichas_y_borde, 2, imagen);
 
             ficha_p1.draw();
             ficha_p2.draw();
@@ -193,7 +189,10 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let y = -1; y < 2; y++) {
 
             for (let x = -secuencia_size + 1; x < ((secuencia_size * 2) - 1); x++) {
-                let ficha = casillas_tablero[ultima_ficha_y + (y * x)][ultima_ficha_x + x].getFicha();
+                let ficha
+                let nueva_pos_y = ultima_ficha_y + (y * x);
+                let nueva_pos_x = ultima_ficha_x + x;
+                if ((nueva_pos_y >= 0 && nueva_pos_y < tablero_celdas_vertical) && (nueva_pos_x >= 0 && nueva_pos_x < tablero_celdas_horizontal)) ficha = casillas_tablero[nueva_pos_y][nueva_pos_x].getFicha();
                 if (ficha && ficha.esJugador(jugador)) {
                     fichas_consecutivas++;
                     secuencia.push(ficha);
@@ -205,8 +204,12 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         //Revisa Verticalmente
-        for (let y = -(secuencia_size); y < 0; y++) {
-            let ficha = casillas_tablero[ultima_ficha_y + y][ultima_ficha_x].getFicha();
+        for (let y = secuencia_size - 1; y >= 0; y--) {
+            let ficha
+            let nueva_pos_y = ultima_ficha_y + y;
+            let nueva_pos_x = ultima_ficha_x;
+            //No revisa si x 'es valida' porque x es igual a la ficha recibida.
+            if ((nueva_pos_y >= 0 && nueva_pos_y < tablero_celdas_vertical)) ficha = casillas_tablero[nueva_pos_y][nueva_pos_x].getFicha();
             if (ficha && ficha.esJugador(jugador)) {
                 fichas_consecutivas++;
                 secuencia.push(ficha);
@@ -226,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
         switch (current_player) {
             case 1: color = jugador_1_color; break;
             case 2: color = jugador_2_color; break;
+            default: color = COLOR_GANADOR; break;
         }
         color = hexaToRgb(color);
         color[3] *= TRANSPARENCIA_COLOR_FONDO;
@@ -297,16 +301,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 //Recorre la fila de la matriz de abajo hacia arriba para buscar el primer espacio libre.
                 let y = tablero_celdas_vertical - 1;
+
                 while (y >= 0) {
                     let ficha = casillas_tablero[y][index].getFicha();
+                    let secuencia_ganadora = null;
                     if (!ficha) {
                         eliminarObjetoEnArray(ficha_arrastrada, array_fichas);
                         casillas_tablero[y][index].setFicha(ficha_arrastrada);
-                        cambiarJugadorActual();
-                        return;
+
+                        secuencia_ganadora = buscarSecuenciaFichas(y, index);
+
+                        if (secuencia_ganadora) {
+                            secuencia_ganadora.forEach(ficha => {
+                                ficha.setFondo(COLOR_GANADOR);
+                            });
+                            current_player *= -1;
+                            redrawAll();
+                            return;
+                        } else {
+
+                            cambiarJugadorActual();
+                            return;
+                        }
                     }
                     y--;
                 }
+
 
             }
         }
@@ -318,6 +338,53 @@ document.addEventListener("DOMContentLoaded", () => {
             case 2: current_player--; break;
         }
         redrawAll();
+
+    }
+    function escribirTurnoActual() {
+        let distancia_al_borde = 25;
+        let espacio_renglon = 3;
+        let renglones = [];
+        renglones[0] = "Es el turno del";
+        renglones[1] = " jugador " + current_player;
+        let text_position = "";
+        let text_fill = "";
+        let text_align = "";
+        let font_size = 1.0 * window_width / 75;
+        ctx.font = font_size + "pt Verdana";
+        // ctx.strokeStyle = "black";
+        // ctx.lineWidth = 2;
+        switch (current_player) {
+            case 1:
+                text_fill = jugador_1_color;
+                text_position = getPosicionEnCanvas(distancia_al_borde, distancia_al_borde);
+                text_align = "left";
+                break;
+            case 2:
+                text_fill = jugador_2_color;
+                text_position = getPosicionEnCanvas(window_width - distancia_al_borde, distancia_al_borde);
+                text_align = "right";
+                break;
+            default:
+
+                renglones[0] = "Ha ganado el ";
+                renglones[1] = "jugador " + (current_player * -1);
+                text_position = {
+                    x: window_width / 2,
+                    y: distancia_al_borde
+                };
+                text_align = "center";
+                if (current_player == -1) text_fill = jugador_1_color;
+                else text_fill = jugador_2_color;
+                break;
+        }
+        ctx.textAlign = text_align;
+        ctx.fillStyle = text_fill;
+        for (let i = 0; i < renglones.length; i++) {
+            text_position.y += font_size + (i * espacio_renglon);
+            ctx.fillText(renglones[i], text_position.x, text_position.y);
+            // ctx.strokeText(renglones[i], text_position.x, text_position.y);
+
+        }
 
     }
 
