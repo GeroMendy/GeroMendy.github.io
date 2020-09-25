@@ -72,6 +72,9 @@ class Casilla {
     getFicha() {
         return this.ficha;
     }
+    hasFicha() {
+        return this.getFicha() != null;
+    }
     /* Fin Getters */
 
     draw() {
@@ -80,7 +83,7 @@ class Casilla {
         let image = this.getImage();
         let pos = this.getPosition();
         let size = this.getSize();
-        if (image) this.context.drawImage(image, pos.x, pos.y,image.width,image.height);
+        if (image) this.context.drawImage(image, pos.x, pos.y, image.width, image.height);
 
 
     }

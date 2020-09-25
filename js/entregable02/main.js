@@ -35,6 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let jugador_1_color = "#FF8800FF";
     let jugador_2_color = "#2222FFFF";
 
+    let bot = null;
+    let ultima_jugada_bot_info_y = -1;
+    let ultima_jugada_bot_info_x = -1;
+
 
     //Variable para mover la ficha manteniendo la distancia al centro.
     let hay_ficha_en_movimiento = false;
@@ -46,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function startGame() {
         //Carga la matriz con 'espacios vacios'
+        actualizarUI(false);
 
         casillas_tablero = [];
         jugador_1_fichas = [];
@@ -70,9 +75,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let imagen = new Image(ficha_radio * 2, ficha_radio * 2);
         imagen.src = URL_IMAGEN_FICHA;
-        imagen.onload = generarTodasLasFichas(imagen, fichas_por_jugador);
+        imagen.onload = () => {
+
+            for (let ficha = 0; ficha < fichas_por_jugador; ficha++) {
+
+                //Coloca las fichas en una pila desde abajo hacia arriba.
+                let ficha_p1 = createFicha(ficha_radio + ditancia_entre_fichas_y_borde, window_height + ficha_radio - (ficha * 25) - ditancia_entre_fichas_y_borde, 1, imagen);
+                let ficha_p2 = createFicha(window_width - ficha_radio - ditancia_entre_fichas_y_borde, window_height + ficha_radio - (ficha * 25) - ditancia_entre_fichas_y_borde, 2, imagen);
+
+                ficha_p1.draw();
+                ficha_p2.draw();
+
+                jugador_1_fichas.push(ficha_p1);
+                jugador_2_fichas.push(ficha_p2);
+
+                //En caso que la cantidad de fichas sea impar, da una mas al jugador inicial.
+                if ((tablero_celdas_horizontal * tablero_celdas_vertical) % 2 != 0) {
+                    switch (current_player) {
+                        case 1:
+                            let ficha_p1 = createFicha(ficha_radio + ditancia_entre_fichas_y_borde, window_height - ficha_radio - (fichas_por_jugador * 25) - ditancia_entre_fichas_y_borde, 1, imagen);
+                            jugador_1_fichas.push(ficha_p1);
+                            ficha_p1.draw();
+                            break;
+                        case 2:
+                            let ficha_p2 = createFicha(window_width - ficha_radio - ditancia_entre_fichas_y_borde, window_height - ficha_radio - (fichas_por_jugador * 25) - ditancia_entre_fichas_y_borde, 2, imagen);
+                            jugador_2_fichas.push(ficha_p2);
+                            ficha_p2.draw();
+                            break;
+                    }
+                }
+
+            }
+
+            if (bot != null && current_player == 2) {
+                letBotPlay();
+            }
+
+        };
 
         escribirTurnoActual();
+
 
     }
 
@@ -111,37 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 return new Ficha(ctx, x, y, ficha_radio, jugador_1_color, imagen, 1);
             case 2:
                 return new Ficha(ctx, x, y, ficha_radio, jugador_2_color, imagen, 2);
-        }
-    }
-    function generarTodasLasFichas(imagen, fichas_por_jugador) {
-        for (let ficha = 0; ficha < fichas_por_jugador; ficha++) {
-
-            //Coloca las fichas en una pila desde abajo hacia arriba.
-            let ficha_p1 = createFicha(ficha_radio + ditancia_entre_fichas_y_borde, window_height + ficha_radio - (ficha * 25) - ditancia_entre_fichas_y_borde, 1, imagen);
-            let ficha_p2 = createFicha(window_width - ficha_radio - ditancia_entre_fichas_y_borde, window_height + ficha_radio - (ficha * 25) - ditancia_entre_fichas_y_borde, 2, imagen);
-
-            ficha_p1.draw();
-            ficha_p2.draw();
-
-            jugador_1_fichas.push(ficha_p1);
-            jugador_2_fichas.push(ficha_p2);
-
-            //En caso que la cantidad de fichas sea impar, da una mas al jugador inicial.
-            if ((tablero_celdas_horizontal * tablero_celdas_vertical) % 2 != 0) {
-                switch (current_player) {
-                    case 1:
-                        let ficha_p1 = createFicha(ficha_radio + ditancia_entre_fichas_y_borde, window_height - ficha_radio - (fichas_por_jugador * 25) - ditancia_entre_fichas_y_borde, 1, imagen);
-                        jugador_1_fichas.push(ficha_p1);
-                        ficha_p1.draw();
-                        break;
-                    case 2:
-                        let ficha_p2 = createFicha(window_width - ficha_radio - ditancia_entre_fichas_y_borde, window_height - ficha_radio - (fichas_por_jugador * 25) - ditancia_entre_fichas_y_borde, 2, imagen);
-                        jugador_2_fichas.push(ficha_p2);
-                        ficha_p2.draw();
-                        break;
-                }
-            }
-
         }
     }
 
@@ -184,6 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let fichas_consecutivas = 0;
         let secuencia = [];
+        let todas_secuencias_validas = [];
 
         //Revisa todo menos verticalmente.
         for (let y = -1; y < 2; y++) {
@@ -196,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (ficha && ficha.esJugador(jugador)) {
                     fichas_consecutivas++;
                     secuencia.push(ficha);
-                    if (fichas_consecutivas == secuencia_size) return secuencia;
+                    if (fichas_consecutivas == secuencia_size) todas_secuencias_validas.push(secuencia);
                 } else {
                     fichas_consecutivas = 0;
                     secuencia = [];
@@ -213,14 +225,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (ficha && ficha.esJugador(jugador)) {
                 fichas_consecutivas++;
                 secuencia.push(ficha);
-                if (fichas_consecutivas == secuencia_size) return secuencia;
+                if (fichas_consecutivas == secuencia_size) todas_secuencias_validas.push(secuencia);
             } else {
                 fichas_consecutivas = 0;
                 secuencia = [];
             }
 
         }
-        return false;
+        return todas_secuencias_validas;
     }
 
     //Cambia el color de fondo a una version transparente del color del jugador.
@@ -284,52 +296,83 @@ document.addEventListener("DOMContentLoaded", () => {
         redrawAll();
     }
     //Al soltar el mouse, revisa si la ficha fue dejada en el espacio libre para ser jugada.
-    function jugarFicha() {
+    function intentarjugada() {
         let fueJugada = false;
         if (ficha_arrastrada) {
-            let index = 0;
-            while (index < colliders_tablero.length && !fueJugada) {
-                fueJugada = colliders_tablero[index].isTokenInsideCollider(ficha_arrastrada);
-                index++;
+            let posible_x = 0;
+            while (posible_x < colliders_tablero.length && !fueJugada) {
+                fueJugada = colliders_tablero[posible_x].isTokenInsideCollider(ficha_arrastrada);
+                posible_x++;
             }
             if (fueJugada) {
                 let array_fichas = [];
-                index--;
+                posible_x--;
                 switch (current_player) {
                     case 1: array_fichas = jugador_1_fichas; break;
                     case 2: array_fichas = jugador_2_fichas; break;
                 }
-                //Recorre la fila de la matriz de abajo hacia arriba para buscar el primer espacio libre.
-                let y = tablero_celdas_vertical - 1;
+                let valor_y = buscarPrimeraPosicionVerticalValida(posible_x);
+                let conjunto_secuencias_ganadoras = null;
+                if (valor_y) {
+                    eliminarObjetoEnArray(ficha_arrastrada, array_fichas);
+                    casillas_tablero[valor_y][posible_x].setFicha(ficha_arrastrada);
 
-                while (y >= 0) {
-                    let ficha = casillas_tablero[y][index].getFicha();
-                    let secuencia_ganadora = null;
-                    if (!ficha) {
-                        eliminarObjetoEnArray(ficha_arrastrada, array_fichas);
-                        casillas_tablero[y][index].setFicha(ficha_arrastrada);
+                    //Recibe un array con cada una de las secuencias (arrays de fichas) que cumplen con ese largo (en este caso 4).
+                    //'Backtracking completo'
+                    conjunto_secuencias_ganadoras = buscarSecuenciaFichas(valor_y, posible_x);
 
-                        secuencia_ganadora = buscarSecuenciaFichas(y, index);
-
-                        if (secuencia_ganadora) {
+                    if (conjunto_secuencias_ganadoras.length > 0) {
+                        conjunto_secuencias_ganadoras.forEach(secuencia_ganadora => {
                             secuencia_ganadora.forEach(ficha => {
                                 ficha.setFondo(COLOR_GANADOR);
                             });
-                            current_player *= -1;
-                            redrawAll();
-                            return;
-                        } else {
+                        });
+                        current_player *= -1;
+                        redrawAll();
+                        actualizarUI(false);
 
-                            cambiarJugadorActual();
-                            return;
+                        return;
+                    } else {
+
+                        cambiarJugadorActual();
+                        if (bot) {
+                            ultima_jugada_bot_info_x = posible_x;
+                            ultima_jugada_bot_info_y = valor_y;
                         }
                     }
-                    y--;
                 }
 
+                if (bot != null && current_player == 2) {
+                    letBotPlay();
+                }
 
+                redrawAll();
             }
         }
+    }
+    function letBotPlay() {
+        let posicion_decidida_por_bot = bot.jugar(ultima_jugada_bot_info_y, ultima_jugada_bot_info_x);
+        let valor_y = buscarPrimeraPosicionVerticalValida(posicion_decidida_por_bot);
+
+        let pos_in_canvas = casillas_tablero[0][posicion_decidida_por_bot].getCentralPoint();
+        pos_in_canvas.y -= celda_pixel_size;
+        ficha_arrastrada = jugador_2_fichas[jugador_2_fichas.length - 1];
+        ficha_arrastrada.setPosition(pos_in_canvas.x, pos_in_canvas.y);
+        intentarjugada();
+
+    }
+
+    function buscarPrimeraPosicionVerticalValida(x) {
+        //Recorre la fila de la matriz de abajo hacia arriba para buscar el primer espacio libre.
+        let y = tablero_celdas_vertical - 1;
+
+        while (y >= 0) {
+            let ficha = casillas_tablero[y][x].getFicha();
+            if (!ficha) return y;
+            y--;
+        }
+        return false;
+
     }
 
     function cambiarJugadorActual() {
@@ -406,9 +449,31 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function actualizarUI(partida_empezada = false) {
+        if (partida_empezada) {
+            document.querySelector("#js-reset_game").classList.remove("hidden");
+            document.querySelector("#js-vs_human").classList.add("hidden");
+            document.querySelector("#js-vs_bot").classList.add("hidden");
+        } else {
+            document.querySelector("#js-reset_game").classList.add("hidden");
+            document.querySelector("#js-vs_human").classList.remove("hidden");
+            document.querySelector("#js-vs_bot").classList.remove("hidden");
+        }
+
+    }
+
     /* Event Listenners */
 
     document.querySelector("#js-reset_game").addEventListener("click", startGame);
+
+    document.querySelector("#js-vs_bot").addEventListener("click", () => {
+        bot = new Bot(ctx, tablero_celdas_vertical, tablero_celdas_horizontal, FICHAS_NECESARIAS_PARA_VICTORIA);
+        startGame();
+    });
+    document.querySelector("#js-vs_human").addEventListener("click", () => {
+        bot = null;
+        startGame();
+    });
 
     canvas.addEventListener("mousedown", (e) => {
 
@@ -438,7 +503,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     canvas.addEventListener("mouseup", () => {
         //Si una ficha estaba siendo arrastrada, revisa si fue jugada al soltarla.
-        if (hay_ficha_en_movimiento) jugarFicha();
+        if (hay_ficha_en_movimiento) {
+            actualizarUI(true);
+            intentarjugada();
+        }
         hay_ficha_en_movimiento = false;
         ficha_arrastrada = null;
     });
@@ -449,98 +517,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
-
     /* Inicio de llamado a funciones */
     setTableroSize();
     startGame();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // let icono_player_1 = new Figura(
-    //     [
-    //         [15,5],
-    //         [25,5],
-    //         [25,55],
-    //         [15,55],
-    //         [15,17],
-    //         [7,25],
-    //         [7,13]
-    //     ]
-    // );
-    // let icono_player_2 = new Figura(
-    //     [
-    //         [5,5],
-    //         [25,5],
-    //         [25,20],
-    //         [10,20],
-    //         [10,25],
-    //         [25,25],
-    //         [25,30],
-    //         [5,30],
-    //         [5,15],
-    //         [20,15],
-    //         [20,10],
-    //         [5,10]
-    //     ]
-    // );
-    // let icono_victoria = new Figura(
-    //     [
-
-    //     ]
-    // );
 
 
 });

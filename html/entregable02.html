@@ -13,18 +13,23 @@
     <div id="js-canvas_container">
         <canvas id="js-canvas" width="4000" height="4000"></canvas>
     </div>
-    <!--
-    <label for="">Ancho del tablero : </label>
-    <input type="number" value="7" class="js-size_tablero">
-    <label for="">Alto del tablero : </label>
-    <input type="number" value="6" class="js-size_tablero">
-    <button id="js-change_size_tablero">Cambiar tama&ntildeo del tablero</button>
-    -->
-    <button id="js-reset_game">Reiniciar</button>
+    
+    <!-- <label class="elem_debajo_de_canvas" for="">Ancho del tablero : </label>
+    <input class="elem_debajo_de_canvas" type="number" value="7" class="js-size_tablero">
+    <label class="elem_debajo_de_canvas" for="">Alto del tablero : </label>
+    <input class="elem_debajo_de_canvas" type="number" value="6" class="js-size_tablero">
+    <button class="elem_debajo_de_canvas" id="js-change_size_tablero">Cambiar tama&ntildeo del tablero</button> -->
+   
+    <button class="elem_debajo_de_canvas hidden" id="js-reset_game">Reiniciar</button>
+
+    <button class="elem_debajo_de_canvas" id="js-vs_bot">Jugar vs AI</button>
+    <button class="elem_debajo_de_canvas" id="js-vs_human">Jugar vs player</button>
+
     <script src="../js/entregable02/ficha.js"></script>
     <script src="../js/entregable02/casilla.js"></script>
     <script src="../js/entregable02/main.js"></script>
     <script src="../js/entregable02/collider.js"></script>
+    <script src="../js/entregable02/bot.js"></script>
     <script src="../js/color_converter.js"></script>
 </body>
 
