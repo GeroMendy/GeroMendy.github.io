@@ -50,7 +50,7 @@ class Bot {
                     jugada.prioridad += 1;
                     revision_posiciones_siguientes++;
                 }
-                if (this.esPosicionSinFicha(jugada.y, jugada.x)&&jugada.prioridad>1) {
+                if (this.esPosicionSinFicha(jugada.y, jugada.x) && jugada.prioridad > 1) {
                     this.posibles_jugadas.push(jugada);
                 }
                 jugada = {
@@ -62,7 +62,7 @@ class Bot {
                     jugada.prioridad += 1;
                     revision_posiciones_siguientes++;
                 }
-                if (this.esPosicionSinFicha(jugada.y, jugada.x)&&jugada.prioridad>1) {
+                if (this.esPosicionSinFicha(jugada.y, jugada.x) && jugada.prioridad > 1) {
                     this.posibles_jugadas.push(jugada);
                 }
             });
@@ -221,8 +221,10 @@ class Bot {
         }
         let elegida = Math.random() * max_prior;
         for (let i = 0; i < jugadas_validas.length; i++) {
-            elegida -= jugadas_validas[i].prioridad;
-            if (elegida <= 0) return jugadas_validas[i];
+            if (jugadas_validas[i]) {
+                elegida -= jugadas_validas[i].prioridad;
+                if (elegida <= 0) return jugadas_validas[i];
+            }
         }
         //Si no hay posibles jugadas devuelve una posición no válida.
         return {
@@ -276,7 +278,7 @@ class Bot {
         return this.getJugadaRandom();
     }
     jugar(ultima_ficha_y, ultima_ficha_x) {
-        if (ultima_ficha_y > 0 && ultima_ficha_x > 0) this.revisarUltimaJugada(ultima_ficha_y, ultima_ficha_x, 1);
+        if (ultima_ficha_y >= 0 && ultima_ficha_x >= 0) this.revisarUltimaJugada(ultima_ficha_y, ultima_ficha_x, 1);
         let jugada_decidida = this.decidirJugada();
         if (jugada_decidida.x >= 0) {
             this.revisarUltimaJugada(jugada_decidida.y, jugada_decidida.x, 2);

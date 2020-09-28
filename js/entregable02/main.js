@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function clearCanvas(color = CANVAS_DEFAULT_COLOR) {
-        
+
         ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
         // ctx.fillStyle = "#FFFFFFFF";
@@ -410,9 +410,9 @@ document.addEventListener("DOMContentLoaded", () => {
         let text_align = "";
         let font_size = 1.0 * window_width / 65;
         ctx.font = font_size + "pt Verdana";
-        
-        ctx.strokeStyle="#222277FF";
-        ctx.lineWidth ="1px";
+
+        ctx.strokeStyle = "#222277FF";
+        ctx.lineWidth = "1px";
         // ctx.strokeStyle = "black";
         // ctx.lineWidth = 2;
         switch (current_player) {
@@ -463,7 +463,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function eliminarObjetoEnArray(objeto, array) {
         let index = array.indexOf(objeto);
-        if (index > 0) {
+        if (index >= 0) {
             array.splice(index, 1);
         }
     }
@@ -508,7 +508,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         startGame();
     });
-    
+
     document.querySelector("#js-set_default").addEventListener("click", () => {
         setTableroSize();
         fichas_necesarias_para_victoria = DEFAULT_FICHAS_NECESARIAS_PARA_VICTORIA;
