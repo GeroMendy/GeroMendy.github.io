@@ -313,7 +313,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 let valor_y = buscarPrimeraPosicionVerticalValida(posible_x);
                 let conjunto_secuencias_ganadoras = null;
-                if (valor_y) {
+                //!=false está explícito porque if(y) considera y=0 como false.
+                if (valor_y!==false) {
                     eliminarObjetoEnArray(ficha_arrastrada, array_fichas);
                     casillas_tablero[valor_y][posible_x].setFicha(ficha_arrastrada);
 
