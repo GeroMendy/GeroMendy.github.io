@@ -50,7 +50,11 @@ class Bot {
                     jugada.prioridad += 1;
                     revision_posiciones_siguientes++;
                 }
+<<<<<<< HEAD
                 if (this.esPosicionJugable(jugada.y, jugada.x) && jugada.prioridad > 1) {
+=======
+                if (this.esPosicionSinFicha(jugada.y, jugada.x) && jugada.prioridad > 1) {
+>>>>>>> entregable02
                     this.posibles_jugadas.push(jugada);
                 }
                 jugada = {
@@ -62,7 +66,11 @@ class Bot {
                     jugada.prioridad += 1;
                     revision_posiciones_siguientes++;
                 }
+<<<<<<< HEAD
                 if (this.esPosicionJugable(jugada.y, jugada.x) && jugada.prioridad > 1) {
+=======
+                if (this.esPosicionSinFicha(jugada.y, jugada.x) && jugada.prioridad > 1) {
+>>>>>>> entregable02
                     this.posibles_jugadas.push(jugada);
                 }
             });
@@ -215,7 +223,11 @@ class Bot {
         }
         let elegida = Math.random() * max_prior;
         for (let i = 0; i < jugadas_validas.length; i++) {
+<<<<<<< HEAD
             if(jugadas_validas[i]){
+=======
+            if (jugadas_validas[i]) {
+>>>>>>> entregable02
                 elegida -= jugadas_validas[i].prioridad;
                 if (elegida <= 0) return jugadas_validas[i];
             }

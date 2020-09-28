@@ -472,7 +472,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function eliminarObjetoEnArray(objeto, array) {
         let index = array.indexOf(objeto);
         if (index >= 0) {
+<<<<<<< HEAD
             return array.splice(index, 1);
+=======
+            array.splice(index, 1);
+>>>>>>> entregable02
         }
     }
 
