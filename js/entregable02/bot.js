@@ -50,7 +50,7 @@ class Bot {
                     jugada.prioridad += 1;
                     revision_posiciones_siguientes++;
                 }
-                if (this.esPosicionSinFicha(jugada.y, jugada.x)&&jugada.prioridad>1) {
+                if (this.esPosicionJugable(jugada.y, jugada.x) && jugada.prioridad > 1) {
                     this.posibles_jugadas.push(jugada);
                 }
                 jugada = {
@@ -62,7 +62,7 @@ class Bot {
                     jugada.prioridad += 1;
                     revision_posiciones_siguientes++;
                 }
-                if (this.esPosicionSinFicha(jugada.y, jugada.x)&&jugada.prioridad>1) {
+                if (this.esPosicionJugable(jugada.y, jugada.x) && jugada.prioridad > 1) {
                     this.posibles_jugadas.push(jugada);
                 }
             });
@@ -77,7 +77,7 @@ class Bot {
             //Si encuentra una jugada con las mismas posiciones, guarda la prioridad mayor.
             if (jugada_similar && jugada_similar.prioridad < jugada.prioridad) jugada_similar.prioridad = jugada.prioridad;
             //Si no hay una jugada similar y la jugada es posible, la guarda en el array nuevo.
-            else if (this.esPosicionSinFicha(jugada.y, jugada.x)) nuevo_array_jugadas.push(jugada);
+            else if (this.esPosicionJugable(jugada.y, jugada.x)) nuevo_array_jugadas.push(jugada);
         });
         this.posibles_jugadas = nuevo_array_jugadas;
     }
@@ -142,18 +142,15 @@ class Bot {
     //Devuelve la jugada con mayor prioridad con esos x e y.
     encontrarJugada(y, x, array = this.posibles_jugadas) {
         let jugada_encontrada = null;
-        let prioridad_anterior = 0;
+        let prioridad_anterior = -1;
 
-        if (!this.esPosicionSinFicha(y, x)) return null;
+        if (!this.esPosicionJugable(y, x)) return null;
 
         array.forEach(jugada => {
             //Si encuentra una jugada, y tiene mayor prioridad, la agrega
             let prioridad = jugada.prioridad;
-            //Si es exactamente igual a largo_para_victoria - 1, significa que es una jugada que hace ganar al rival.
-            prioridad = 1.0 * prioridad / this.largo_para_victoria;
-            if (prioridad == this.largo_para_victoria - 1) prioridad = 1;
 
-            if (jugada.y == y && jugada.x == x && (!jugada_encontrada || prioridad_anterior < prioridad)) {
+            if (jugada.y == y && jugada.x == x && prioridad_anterior < prioridad) {
                 prioridad_anterior = prioridad;
                 jugada_encontrada = jugada;
             }
@@ -166,13 +163,13 @@ class Bot {
     }
 
     //Revisa que no haya una ficha en la posición.
-    esPosicionSinFicha(y, x) {
+    esPosicionJugable(y, x) {
         let valida = this.esPosicionValida(y, x);
         return (valida && this.casillas_tablero[y][x] == -1);
     }
     //Determina si hay 'plataforma' para ejecutar la jugada.
     esPosibleEsteTurno(y, x) {
-        let posible = this.esPosicionSinFicha(y, x);
+        let posible = this.esPosicionJugable(y, x);
         return (posible && (y == this.max_y - 1 || this.casillas_tablero[y + 1][x] != -1));
     }
     determinarPrioridadEnBaseASiguienteJugada(posible_jugada) {
@@ -189,9 +186,6 @@ class Bot {
             posible_jugada.prioridad = Math.pow(posible_jugada.prioridad, 1 / jugada_casilla_superior.prioridad);
             posible_jugada.revisada = true;
         }
-
-
-
     }
 
     obtenerJugadasPorPrioridad(prioridad) {
@@ -221,8 +215,10 @@ class Bot {
         }
         let elegida = Math.random() * max_prior;
         for (let i = 0; i < jugadas_validas.length; i++) {
-            elegida -= jugadas_validas[i].prioridad;
-            if (elegida <= 0) return jugadas_validas[i];
+            if(jugadas_validas[i]){
+                elegida -= jugadas_validas[i].prioridad;
+                if (elegida <= 0) return jugadas_validas[i];
+            }
         }
         //Si no hay posibles jugadas devuelve una posición no válida.
         return {
@@ -276,7 +272,7 @@ class Bot {
         return this.getJugadaRandom();
     }
     jugar(ultima_ficha_y, ultima_ficha_x) {
-        if (ultima_ficha_y > 0 && ultima_ficha_x > 0) this.revisarUltimaJugada(ultima_ficha_y, ultima_ficha_x, 1);
+        if (ultima_ficha_y >= 0 && ultima_ficha_x >= 0) this.revisarUltimaJugada(ultima_ficha_y, ultima_ficha_x, 1);
         let jugada_decidida = this.decidirJugada();
         if (jugada_decidida.x >= 0) {
             this.revisarUltimaJugada(jugada_decidida.y, jugada_decidida.x, 2);

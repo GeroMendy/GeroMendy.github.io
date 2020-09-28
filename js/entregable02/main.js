@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function clearCanvas(color = CANVAS_DEFAULT_COLOR) {
-        
+
         ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
         // ctx.fillStyle = "#FFFFFFFF";
@@ -165,8 +165,11 @@ document.addEventListener("DOMContentLoaded", () => {
         switch (jugador) {
             case 1:
                 return new Ficha(ctx, x, y, ficha_radio, jugador_1_color, imagen, 1);
+                break;
             case 2:
-                return new Ficha(ctx, x, y, ficha_radio, jugador_2_color, imagen, 2);
+                let x_en_canvas = getPosicionEnCanvas(x, y).x;
+                return new Ficha(ctx, x_en_canvas, y, ficha_radio, jugador_2_color, imagen, 2);
+                break;
         }
     }
 
@@ -273,7 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tablero_pixel_width = window_width * (1 - (2 * espacio_por_jugador));
         celda_pixel_size = tablero_pixel_width / tablero_celdas_horizontal;
 
-        if (celda_pixel_size * (tablero_celdas_vertical + 1) > window_height) {
+        if (celda_pixel_size * (tablero_celdas_vertical + 1) >= window_height) {
             celda_pixel_size = window_height / (tablero_celdas_vertical + 1);
         }
 
@@ -330,6 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let conjunto_secuencias_ganadoras = null;
                 //!=false está explícito porque if(y) considera y=0 como false.
                 if (valor_y !== false) {
+                    //Elimina a ficha del array de fichas del jugador para evitar que la ficha se dibuje con el tablero y luego sobre el tablero con el array.
                     eliminarObjetoEnArray(ficha_arrastrada, array_fichas);
                     casillas_tablero[valor_y][posible_x].setFicha(ficha_arrastrada);
 
@@ -356,6 +360,10 @@ document.addEventListener("DOMContentLoaded", () => {
                             ultima_jugada_bot_info_y = valor_y;
                         }
                     }
+
+                    eliminarObjetoEnArray(ficha_arrastrada, array_fichas);
+                    ficha_arrastrada = null;
+
                 }
 
                 if (bot != null && current_player == 2) {
@@ -410,20 +418,20 @@ document.addEventListener("DOMContentLoaded", () => {
         let text_align = "";
         let font_size = 1.0 * window_width / 65;
         ctx.font = font_size + "pt Verdana";
-        
-        ctx.strokeStyle="#222277FF";
-        ctx.lineWidth ="1px";
+
+        ctx.strokeStyle = "#222277FF";
+        ctx.lineWidth = "1px";
         // ctx.strokeStyle = "black";
         // ctx.lineWidth = 2;
         switch (current_player) {
             case 1:
                 text_fill = jugador_1_color;
-                text_position = getPosicionEnCanvas(distancia_al_borde, distancia_al_borde);
+                text_position = { y: distancia_al_borde, x: distancia_al_borde };
                 text_align = "left";
                 break;
             case 2:
                 text_fill = jugador_2_color;
-                text_position = getPosicionEnCanvas(window_width - distancia_al_borde, distancia_al_borde);
+                text_position = { y: distancia_al_borde, x: window_width - distancia_al_borde };
                 text_align = "right";
                 break;
             default:
@@ -463,8 +471,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function eliminarObjetoEnArray(objeto, array) {
         let index = array.indexOf(objeto);
-        if (index > 0) {
-            array.splice(index, 1);
+        if (index >= 0) {
+            return array.splice(index, 1);
         }
     }
 
@@ -508,7 +516,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         startGame();
     });
-    
+
     document.querySelector("#js-set_default").addEventListener("click", () => {
         setTableroSize();
         fichas_necesarias_para_victoria = DEFAULT_FICHAS_NECESARIAS_PARA_VICTORIA;
