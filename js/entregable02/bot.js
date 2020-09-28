@@ -50,7 +50,7 @@ class Bot {
                     jugada.prioridad += 1;
                     revision_posiciones_siguientes++;
                 }
-                if (this.esPosicionSinFicha(jugada.y, jugada.x) && jugada.prioridad > 1) {
+                if (this.esPosicionDisponible(jugada.y, jugada.x) && jugada.prioridad > 1) {
                     this.posibles_jugadas.push(jugada);
                 }
                 jugada = {
@@ -62,7 +62,7 @@ class Bot {
                     jugada.prioridad += 1;
                     revision_posiciones_siguientes++;
                 }
-                if (this.esPosicionSinFicha(jugada.y, jugada.x) && jugada.prioridad > 1) {
+                if (this.esPosicionDisponible(jugada.y, jugada.x) && jugada.prioridad > 1) {
                     this.posibles_jugadas.push(jugada);
                 }
             });
