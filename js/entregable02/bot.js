@@ -32,18 +32,25 @@ class Bot {
         if (jugador == 2) {
             prioridad_jugador = 0.6;
         }
-        for (let largo_sec = 2; largo_sec < this.largo_para_victoria; largo_sec++) {
+        for (let largo_sec = 1; largo_sec < this.largo_para_victoria; largo_sec++) {
             let posibles_secuencias = this.buscarSecuenciaFichas(ultima_ficha_y, ultima_ficha_x, largo_sec);
             posibles_secuencias.forEach(secuencia => {
                 let cambio_x = secuencia[0].x - secuencia[1].x;
                 let cambio_y = secuencia[0].y - secuencia[1].y;
+
+                let revision_posiciones_siguientes = 1;
 
                 let jugada = {
                     x: secuencia[0].x + cambio_x,
                     y: secuencia[0].y + cambio_y,
                     prioridad: largo_sec + prioridad_jugador
                 };
-                if (this.esPosicionValida(jugada.y, jugada.x)) {
+                //Si las siguientes posiciones salteando la ficha de la jugada corresponde al mismo jugador, considera que la secuencia es mayor a la que encontró.
+                while (jugada.prioridad < this.largo_para_victoria - 1 && this.esPosicionValida(jugada.y + (cambio_y * revision_posiciones_siguientes), jugada.x + (cambio_x * revision_posiciones_siguientes)) && this.casillas_tablero[jugada.y + (cambio_y * revision_posiciones_siguientes)][jugada.x + (cambio_x * revision_posiciones_siguientes)] == jugador) {
+                    jugada.prioridad += 1;
+                    revision_posiciones_siguientes++;
+                }
+                if (this.esPosicionSinFicha(jugada.y, jugada.x)&&jugada.prioridad>1) {
                     this.posibles_jugadas.push(jugada);
                 }
                 jugada = {
@@ -51,7 +58,11 @@ class Bot {
                     y: secuencia[largo_sec - 1].y - cambio_y,
                     prioridad: largo_sec + prioridad_jugador
                 };
-                if (this.esPosicionValida(jugada.y, jugada.x)) {
+                while (jugada.prioridad < this.largo_para_victoria - 1 && this.esPosicionValida(jugada.y + (cambio_y * revision_posiciones_siguientes), jugada.x + (cambio_x * revision_posiciones_siguientes)) && this.casillas_tablero[jugada.y + (cambio_y * revision_posiciones_siguientes)][jugada.x + (cambio_x * revision_posiciones_siguientes)] == jugador) {
+                    jugada.prioridad += 1;
+                    revision_posiciones_siguientes++;
+                }
+                if (this.esPosicionSinFicha(jugada.y, jugada.x)&&jugada.prioridad>1) {
                     this.posibles_jugadas.push(jugada);
                 }
             });
@@ -66,7 +77,7 @@ class Bot {
             //Si encuentra una jugada con las mismas posiciones, guarda la prioridad mayor.
             if (jugada_similar && jugada_similar.prioridad < jugada.prioridad) jugada_similar.prioridad = jugada.prioridad;
             //Si no hay una jugada similar y la jugada es posible, la guarda en el array nuevo.
-            else if (this.esPosicionValida(jugada.y, jugada.x)) nuevo_array_jugadas.push(jugada);
+            else if (this.esPosicionSinFicha(jugada.y, jugada.x)) nuevo_array_jugadas.push(jugada);
         });
         this.posibles_jugadas = nuevo_array_jugadas;
     }
@@ -86,7 +97,7 @@ class Bot {
             for (let x = -secuencia_size + 1; x < ((secuencia_size * 2) - 1); x++) {
                 let nueva_pos_y = ultima_ficha_y + (y * x);
                 let nueva_pos_x = ultima_ficha_x + x;
-                if (nueva_pos_x >= 0 && nueva_pos_x < this.max_x && nueva_pos_y >= 0 && nueva_pos_y < this.max_y) jugador_de_ficha = this.casillas_tablero[nueva_pos_y][nueva_pos_x];
+                if (this.esPosicionValida(nueva_pos_y, nueva_pos_x)) jugador_de_ficha = this.casillas_tablero[nueva_pos_y][nueva_pos_x];
                 else jugador_de_ficha = -1;
 
                 if (jugador_de_ficha == jugador) {
@@ -110,7 +121,7 @@ class Bot {
             let nueva_pos_y = ultima_ficha_y + y;
             let nueva_pos_x = ultima_ficha_x;
             //No revisa si x 'es valida' porque x es igual a la ficha recibida.
-            if (nueva_pos_x >= 0 && nueva_pos_x < this.max_x && nueva_pos_y >= 0 && nueva_pos_y < this.max_y) jugador_de_ficha = this.casillas_tablero[nueva_pos_y][nueva_pos_x];
+            if (this.esPosicionValida(nueva_pos_y, nueva_pos_x)) jugador_de_ficha = this.casillas_tablero[nueva_pos_y][nueva_pos_x];
             else jugador_de_ficha = -1;
 
             if (jugador_de_ficha == jugador) {
@@ -133,7 +144,7 @@ class Bot {
         let jugada_encontrada = null;
         let prioridad_anterior = 0;
 
-        if (!this.esPosicionValida(y, x)) return null;
+        if (!this.esPosicionSinFicha(y, x)) return null;
 
         array.forEach(jugada => {
             //Si encuentra una jugada, y tiene mayor prioridad, la agrega
@@ -149,17 +160,20 @@ class Bot {
         });
         return jugada_encontrada;
     }
-    //Determina si los valores están dentro del tablero y que no haya una ficha.
+
     esPosicionValida(y, x) {
-        let valida = (x >= 0 && x < this.max_x && y >= 0 && y < this.max_y);
-        valida = (valida && this.casillas_tablero[y][x] == -1);
-        return valida;
+        return (x >= 0 && x < this.max_x && y >= 0 && y < this.max_y);
+    }
+
+    //Revisa que no haya una ficha en la posición.
+    esPosicionSinFicha(y, x) {
+        let valida = this.esPosicionValida(y, x);
+        return (valida && this.casillas_tablero[y][x] == -1);
     }
     //Determina si hay 'plataforma' para ejecutar la jugada.
     esPosibleEsteTurno(y, x) {
-        let posible = this.esPosicionValida(y, x);
-        posible = (posible && (y == this.max_y - 1 || this.casillas_tablero[y + 1][x] != -1));
-        return posible;
+        let posible = this.esPosicionSinFicha(y, x);
+        return (posible && (y == this.max_y - 1 || this.casillas_tablero[y + 1][x] != -1));
     }
     determinarPrioridadEnBaseASiguienteJugada(posible_jugada) {
         //Busca jugada en la pos superior.

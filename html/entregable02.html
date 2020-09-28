@@ -14,16 +14,29 @@
         <canvas id="js-canvas" width="4000" height="4000"></canvas>
     </div>
     
-    <!-- <label class="elem_debajo_de_canvas" for="">Ancho del tablero : </label>
-    <input class="elem_debajo_de_canvas" type="number" value="7" class="js-size_tablero">
-    <label class="elem_debajo_de_canvas" for="">Alto del tablero : </label>
-    <input class="elem_debajo_de_canvas" type="number" value="6" class="js-size_tablero">
-    <button class="elem_debajo_de_canvas" id="js-change_size_tablero">Cambiar tama&ntildeo del tablero</button> -->
-   
-    <button class="elem_debajo_de_canvas hidden" id="js-reset_game">Reiniciar</button>
+    <div class="elem_debajo_de_canvas">
+        <label for="">Ancho del tablero : </label>
+        <input type="number" value="7" class="js-size_tablero">
+    </div>
+    <div class="elem_debajo_de_canvas">
+        <label for="">Alto del tablero : </label>
+        <input type="number" value="6" class="js-size_tablero">
+    </div>
+    <div class="elem_debajo_de_canvas">
+        <label for="">Fichas necesarias para ganar : </label>
+        <input type="number" value="4" min="3" id="js-fichas_necesarias_para_victoria">
+    </div>
 
-    <button class="elem_debajo_de_canvas" id="js-vs_bot">Jugar vs AI</button>
-    <button class="elem_debajo_de_canvas" id="js-vs_human">Jugar vs player</button>
+    <button class="elem_debajo_de_canvas" id="js-change_rules">Cambiar reglas del juego</button>
+
+    <button class="elem_debajo_de_canvas" id="js-set_default">Cambiar reglas a default</button>
+   
+    <button class="elem_debajo_de_canvas" id="js-reset_game">Reiniciar</button>
+    
+    <div id="js-opponent_selector" class="elem_debajo_de_canvas">
+        <button id="js-vs_bot">Jugar vs AI</button>
+        <button id="js-vs_human">Jugar vs player</button>
+    </div>
 
     <script src="../js/entregable02/ficha.js"></script>
     <script src="../js/entregable02/casilla.js"></script>

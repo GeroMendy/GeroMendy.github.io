@@ -7,12 +7,30 @@
 }
 #js-canvas{
     margin: 0;
+    background-image: url("../../img/entregable02/canvas_background.jpg");
+}
+.elem_debajo_de_canvas{
+    float: left;
+    width: 31.4%;
+    margin: 0.5% 0.8%;
+    padding: 0;
+
+}
+.elem_debajo_de_canvas label{
+    width: 70%;
+}
+.elem_debajo_de_canvas input{
+    width: 28%;
+}
+#js-opponent_selector button{
+    width: 45%;
+    margin: 0 2%;
+    float: left;
+}
+#js-opponent_selector{
+    padding: 0;
 }
 
 .hidden{
     display: none;
-}
-.js-size_tablero, #js-change_size_tablero, #js-reset_game{
-    margin-top: 1%;
-    margin-right: 2%;
 }

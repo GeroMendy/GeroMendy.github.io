@@ -5,15 +5,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const CANVAS_DEFAULT_COLOR = "#00DDAA33";
     const URL_IMAGEN_CASILLA_TABLERO = "../img/entregable02/casilla.png";
     const URL_IMAGEN_FICHA = "../img/entregable02/ficha.png";
-    const FICHAS_NECESARIAS_PARA_VICTORIA = 4;
-    const TRANSPARENCIA_COLOR_FONDO = 0.4;
+    const DEFAULT_FICHAS_NECESARIAS_PARA_VICTORIA = 4;
+    const TRANSPARENCIA_COLOR_FONDO = 0.7;
     const COLOR_GANADOR = "#33FF55FF";
+    const DEFAULT_TABLERO_SIZE = { width: 7, height: 6 };
 
     let canvas = document.querySelector("#js-canvas");
     let ctx = canvas.getContext("2d");
 
-    let tablero_celdas_horizontal = 7;
-    let tablero_celdas_vertical = 6;
+    let fichas_necesarias_para_victoria = DEFAULT_FICHAS_NECESARIAS_PARA_VICTORIA;
+    let tablero_celdas_horizontal = DEFAULT_TABLERO_SIZE.width;
+    let tablero_celdas_vertical = DEFAULT_TABLERO_SIZE.height;
     let espacio_por_jugador = 0.15;
 
     let ditancia_entre_fichas_y_borde = 12;
@@ -33,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // let ultima_ficha_jugada = null;
 
     let jugador_1_color = "#FF8800FF";
-    let jugador_2_color = "#2222FFFF";
+    let jugador_2_color = "#CCCCCCFF";
 
     let bot = null;
     let ultima_jugada_bot_info_y = -1;
@@ -73,15 +75,21 @@ document.addEventListener("DOMContentLoaded", () => {
         clearCanvas(color);
         createTablero();
 
+        if (bot) bot = new Bot(ctx, tablero_celdas_vertical, tablero_celdas_horizontal, fichas_necesarias_para_victoria);
+
         let imagen = new Image(ficha_radio * 2, ficha_radio * 2);
         imagen.src = URL_IMAGEN_FICHA;
         imagen.onload = () => {
 
+            // let pos_y = celda_pixel_size + ((y + 0.5) * celda_pixel_size);
+            let distancia_entre_fichas = ((tablero_celdas_vertical - 1) * celda_pixel_size) / fichas_por_jugador;
+
             for (let ficha = 0; ficha < fichas_por_jugador; ficha++) {
+                let height_ficha = 2 * celda_pixel_size + (ficha * distancia_entre_fichas);
 
                 //Coloca las fichas en una pila desde abajo hacia arriba.
-                let ficha_p1 = createFicha(ficha_radio + ditancia_entre_fichas_y_borde, window_height + ficha_radio - (ficha * 25) - ditancia_entre_fichas_y_borde, 1, imagen);
-                let ficha_p2 = createFicha(window_width - ficha_radio - ditancia_entre_fichas_y_borde, window_height + ficha_radio - (ficha * 25) - ditancia_entre_fichas_y_borde, 2, imagen);
+                let ficha_p1 = createFicha(ficha_radio + ditancia_entre_fichas_y_borde, height_ficha, 1, imagen);
+                let ficha_p2 = createFicha(window_width - (ficha_radio + ditancia_entre_fichas_y_borde), height_ficha, 2, imagen);
 
                 ficha_p1.draw();
                 ficha_p2.draw();
@@ -93,12 +101,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 if ((tablero_celdas_horizontal * tablero_celdas_vertical) % 2 != 0) {
                     switch (current_player) {
                         case 1:
-                            let ficha_p1 = createFicha(ficha_radio + ditancia_entre_fichas_y_borde, window_height - ficha_radio - (fichas_por_jugador * 25) - ditancia_entre_fichas_y_borde, 1, imagen);
+                            let ficha_p1 = createFicha(ficha_radio + ditancia_entre_fichas_y_borde, window_height - ficha_radio - (fichas_por_jugador * distancia_entre_fichas) - ditancia_entre_fichas_y_borde, 1, imagen);
                             jugador_1_fichas.push(ficha_p1);
                             ficha_p1.draw();
                             break;
                         case 2:
-                            let ficha_p2 = createFicha(window_width - ficha_radio - ditancia_entre_fichas_y_borde, window_height - ficha_radio - (fichas_por_jugador * 25) - ditancia_entre_fichas_y_borde, 2, imagen);
+                            let ficha_p2 = createFicha(window_width - ficha_radio - ditancia_entre_fichas_y_borde, window_height - ficha_radio - (fichas_por_jugador * distancia_entre_fichas) - ditancia_entre_fichas_y_borde, 2, imagen);
                             jugador_2_fichas.push(ficha_p2);
                             ficha_p2.draw();
                             break;
@@ -137,9 +145,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function clearCanvas(color = CANVAS_DEFAULT_COLOR) {
+        
         ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
-        ctx.fillStyle = "#FFFFFFFF";
+        // ctx.fillStyle = "#FFFFFFFF";
+        // ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+        // ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+        ctx.fillStyle = "#FFFFFF00";
         ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
         ctx.fillStyle = color;
@@ -189,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector("#js-canvas_container").style.height = (celda_pixel_size * (tablero_celdas_vertical + 2)) + "px";
     }
 
-    function buscarSecuenciaFichas(ultima_ficha_y, ultima_ficha_x, secuencia_size = FICHAS_NECESARIAS_PARA_VICTORIA) {
+    function buscarSecuenciaFichas(ultima_ficha_y, ultima_ficha_x, secuencia_size = fichas_necesarias_para_victoria) {
 
         let jugador = casillas_tablero[ultima_ficha_y][ultima_ficha_x].getJugador();
 
@@ -249,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return color;
     }
 
-    function setTableroSize(new_width = tablero_celdas_horizontal, new_height = tablero_celdas_vertical) {
+    function setTableroSize(new_width = DEFAULT_TABLERO_SIZE.width, new_height = DEFAULT_TABLERO_SIZE.height) {
 
         if (new_width > 0 && new_height > 0) {
             tablero_celdas_horizontal = new_width;
@@ -262,6 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (celda_pixel_size * (tablero_celdas_vertical + 1) > window_height) {
             celda_pixel_size = window_height / (tablero_celdas_vertical + 1);
         }
+
         ficha_radio = 1.0 * celda_pixel_size / 2;
 
     }
@@ -314,7 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let valor_y = buscarPrimeraPosicionVerticalValida(posible_x);
                 let conjunto_secuencias_ganadoras = null;
                 //!=false está explícito porque if(y) considera y=0 como false.
-                if (valor_y!==false) {
+                if (valor_y !== false) {
                     eliminarObjetoEnArray(ficha_arrastrada, array_fichas);
                     casillas_tablero[valor_y][posible_x].setFicha(ficha_arrastrada);
 
@@ -393,8 +408,11 @@ document.addEventListener("DOMContentLoaded", () => {
         let text_position = "";
         let text_fill = "";
         let text_align = "";
-        let font_size = 1.0 * window_width / 75;
+        let font_size = 1.0 * window_width / 65;
         ctx.font = font_size + "pt Verdana";
+        
+        ctx.strokeStyle="#222277FF";
+        ctx.lineWidth ="1px";
         // ctx.strokeStyle = "black";
         // ctx.lineWidth = 2;
         switch (current_player) {
@@ -425,8 +443,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fillStyle = text_fill;
         for (let i = 0; i < renglones.length; i++) {
             text_position.y += font_size + (i * espacio_renglon);
+            ctx.strokeText(renglones[i], text_position.x, text_position.y);
             ctx.fillText(renglones[i], text_position.x, text_position.y);
-            // ctx.strokeText(renglones[i], text_position.x, text_position.y);
 
         }
 
@@ -453,12 +471,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function actualizarUI(partida_empezada = false) {
         if (partida_empezada) {
             document.querySelector("#js-reset_game").classList.remove("hidden");
-            document.querySelector("#js-vs_human").classList.add("hidden");
-            document.querySelector("#js-vs_bot").classList.add("hidden");
+            document.querySelector("#js-opponent_selector").classList.add("hidden");
         } else {
             document.querySelector("#js-reset_game").classList.add("hidden");
-            document.querySelector("#js-vs_human").classList.remove("hidden");
-            document.querySelector("#js-vs_bot").classList.remove("hidden");
+            document.querySelector("#js-opponent_selector").classList.remove("hidden");
         }
 
     }
@@ -468,11 +484,35 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#js-reset_game").addEventListener("click", startGame);
 
     document.querySelector("#js-vs_bot").addEventListener("click", () => {
-        bot = new Bot(ctx, tablero_celdas_vertical, tablero_celdas_horizontal, FICHAS_NECESARIAS_PARA_VICTORIA);
+        bot = new Bot(ctx, tablero_celdas_vertical, tablero_celdas_horizontal, fichas_necesarias_para_victoria);
         startGame();
     });
     document.querySelector("#js-vs_human").addEventListener("click", () => {
         bot = null;
+        startGame();
+    });
+    document.querySelector("#js-change_rules").addEventListener("click", () => {
+        let new_size_inputs = document.querySelectorAll(".js-size_tablero");
+        let new_size = [];
+        new_size[0] = parseInt(new_size_inputs[0].value);
+        new_size[1] = parseInt(new_size_inputs[1].value);
+        setTableroSize(new_size[0], new_size[1]);
+
+        let new_fichas_necesarias = document.querySelector("#js-fichas_necesarias_para_victoria").value;
+        new_fichas_necesarias = parseInt(new_fichas_necesarias);
+        if (new_fichas_necesarias >= 3) {
+            fichas_necesarias_para_victoria = new_fichas_necesarias
+        } else {
+            fichas_necesarias_para_victoria = DEFAULT_FICHAS_NECESARIAS_PARA_VICTORIA;
+        }
+
+        startGame();
+    });
+    
+    document.querySelector("#js-set_default").addEventListener("click", () => {
+        setTableroSize();
+        fichas_necesarias_para_victoria = DEFAULT_FICHAS_NECESARIAS_PARA_VICTORIA;
+
         startGame();
     });
 
@@ -515,8 +555,6 @@ document.addEventListener("DOMContentLoaded", () => {
         hay_ficha_en_movimiento = false;
         ficha_arrastrada = null;
     });
-
-
 
     /* Inicio de llamado a funciones */
     setTableroSize();
