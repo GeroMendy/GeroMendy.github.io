@@ -77,7 +77,7 @@ class Bot {
             //Si encuentra una jugada con las mismas posiciones, guarda la prioridad mayor.
             if (jugada_similar && jugada_similar.prioridad < jugada.prioridad) jugada_similar.prioridad = jugada.prioridad;
             //Si no hay una jugada similar y la jugada es posible, la guarda en el array nuevo.
-            else if (this.esPosicionJugable(jugada.y, jugada.x)) nuevo_array_jugadas.push(jugada);
+            else if (this.esPosicionDisponible(jugada.y, jugada.x)) nuevo_array_jugadas.push(jugada);
         });
         this.posibles_jugadas = nuevo_array_jugadas;
     }
@@ -144,7 +144,7 @@ class Bot {
         let jugada_encontrada = null;
         let prioridad_anterior = -1;
 
-        if (!this.esPosicionJugable(y, x)) return null;
+        if (!this.esPosicionDisponible(y, x)) return null;
 
         array.forEach(jugada => {
             //Si encuentra una jugada, y tiene mayor prioridad, la agrega
@@ -163,13 +163,13 @@ class Bot {
     }
 
     //Revisa que no haya una ficha en la posición.
-    esPosicionJugable(y, x) {
+    esPosicionDisponible(y, x) {
         let valida = this.esPosicionValida(y, x);
         return (valida && this.casillas_tablero[y][x] == -1);
     }
     //Determina si hay 'plataforma' para ejecutar la jugada.
     esPosibleEsteTurno(y, x) {
-        let posible = this.esPosicionJugable(y, x);
+        let posible = this.esPosicionDisponible(y, x);
         return (posible && (y == this.max_y - 1 || this.casillas_tablero[y + 1][x] != -1));
     }
     determinarPrioridadEnBaseASiguienteJugada(posible_jugada) {

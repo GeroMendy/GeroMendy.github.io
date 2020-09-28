@@ -363,6 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     eliminarObjetoEnArray(ficha_arrastrada, array_fichas);
                     ficha_arrastrada = null;
+                    hay_ficha_en_movimiento = false;
 
                 }
 
