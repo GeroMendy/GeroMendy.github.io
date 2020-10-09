@@ -60,12 +60,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let pos_ratio = rect.top / max_position_parallax;
         pos_ratio = 1 - pos_ratio;
-        changeParallaxValues(pos_ratio);
+
+        if (is_parallax_fixed) changeParallaxValues(pos_ratio);
+
         scroll(ajustarScroll);
     }
 
     function changeParallaxValues(pos_ratio) {
         hero_parallax_controller.changeParallaxValues(pos_ratio);
+    }
+
+    function showLoading(miliseconds = 3000) {
+
+        let load_screen = document.querySelector("#pantalla_carga");
+        load_screen.classList.remove("js-hide");
+        document.body.classList.add("js-no_scroll");
+
+        setTimeout(() => {
+
+            load_screen.classList.add("js-hide");
+            document.body.classList.remove("js-no_scroll");
+
+        }, miliseconds);
+
     }
 
     window.addEventListener("resize", ajustarHeightParallax);
