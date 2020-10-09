@@ -1,0 +1,46 @@
+#hero_parallax_principal{
+    /* top: 0;
+    left: 0;
+    position: fixed; */
+    width: 100%;
+    background-color: red;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+
+    z-index: 1;
+}
+#contenido_siguiente{
+    margin: 0;
+    height: 4000px;
+    width: 100%;
+    background-color: blue;
+    z-index: 1;
+}
+.parallax_layer{
+    /* position: fixed; */
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.parallax_layer:nth-child(2){
+    transform-origin: 50% 73%;
+}
+.parallax_layer:nth-child(3){
+    transform-origin: 50% 0;
+    
+}
+.parallax_layer:nth-child(5){
+    transform-origin: 50% 76.5%;
+    
+}
+.js-parallax_fixed{
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+.js-parallax_absolute{
+    position: absolute;
+    left: 0;
+}
