@@ -98,15 +98,18 @@ div{
     background-color: rgba(0, 0, 0, 0);
     border: 0;
     display: block;
-    margin: 0 0 0 0;
+    margin: 0;
+    padding: 0;
     z-index: 8;
     position: fixed;
-    left: 2%;
-    top: 2%;
+    left: 10px;
+    top: 10px;
+    min-width: 35px;
     width: 3%;
 }
 #burger_menu button img{
     width: 100%;
+    margin: 0;
 }
 #burger_menu button:focus{
     outline: none;
@@ -128,6 +131,7 @@ div{
     transition: left .6s ease-in;
 }
 #burger_menu ul{
+    margin: 0;
     padding: 0;
     list-style: none;
 }
