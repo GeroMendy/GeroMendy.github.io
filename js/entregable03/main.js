@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         image_size = parallax_layers[0].clientHeight;
         min_position_parallax = image_size;
         max_position_parallax = image_size * 4;
-        document.querySelector("#contenido_siguiente").style.margin = max_position_parallax + "px 0 0 0";
+        document.querySelector("#contenido_siguiente_a_parallax").style.margin = max_position_parallax + "px 0 0 0";
 
         //Vuelve a revisar el image_size en caso de que la barra de scroll le haya robado espacio.
         image_size = parallax_layers[0].clientHeight;
@@ -88,5 +88,4 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("resize", ajustarHeightParallax);
 
     ajustarHeightParallax();
-
 });

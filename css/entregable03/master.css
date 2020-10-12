@@ -1,9 +1,26 @@
+/* Estilo general */
+
+body{
+    background-color: #2B0600;
+    font-family: sans-serif;
+    color: #2B0600;
+    font-weight: 600;
+}
+div{
+    background-color: #FFA7A7;
+}
+
+/* Fin estilo general */
+
+/* Clases para asignar desde JS */
 .js-no_scroll{
     overflow: hidden;
 }
 .js-hide{
     display: none;
 }
+/* Fin clases para asignar desde JS */
+/* Pantalla de carga */
 
 #pantalla_carga{
     width: 100%;
@@ -25,7 +42,8 @@
     from {transform:rotate(30deg)}
     to {transform:rotate(90deg)}
 }
-
+/* Fin pantalla de carga */
+/* Hero parallax */
 
 #hero_parallax_principal{
     /* top: 0;
@@ -39,11 +57,11 @@
 
     z-index: 1;
 }
-#contenido_siguiente{
+#contenido_siguiente_a_parallax{
     margin: 0;
     height: 4000px;
     width: 100%;
-    background-color: blue;
+    background-color: inherit ;
     z-index: 1;
 }
 .parallax_layer{
@@ -73,3 +91,53 @@
     position: absolute;
     left: 0;
 }
+/* Fin hero parallax */
+/* Burger menu */
+
+#burger_menu button{
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
+    display: block;
+    margin: 0 0 0 0;
+    z-index: 8;
+    position: fixed;
+    left: 2%;
+    top: 2%;
+    width: 3%;
+}
+#burger_menu button img{
+    width: 100%;
+}
+#burger_menu button:focus{
+    outline: none;
+}
+#burger_menu button:focus + div{
+    left: 0;
+    transition: left .6s ease-out;
+}
+#burger_menu div{
+    /* margin-top: 25%;     */
+    position: fixed;
+    width: 18%;
+    height: 1000px;
+    background-color: #FFA7A7FF;
+    border-right: solid 1px #2B0600FF;
+    z-index: 9;
+    left: -19%;
+    top: 0;
+    transition: left .6s ease-in;
+}
+#burger_menu ul{
+    padding: 0;
+    list-style: none;
+}
+.burger_menu_item:first-child{
+    margin-top: 0;
+}
+.burger_menu_item{
+    width: 94%;
+    padding: 7% 3%;
+    border-bottom: solid 1px #F5A0A0FF;
+}
+
+/* Fin burger menu */
