@@ -57,7 +57,7 @@ div{
 
     z-index: 1;
 }
-#contenido_siguiente_a_parallax{
+#limit_parallax_helper{
     margin: 0;
     height: 4000px;
     width: 100%;
@@ -95,7 +95,7 @@ div{
 /* Burger menu */
 
 #burger_menu button{
-    background-color: rgba(0, 0, 0, 0);
+    /* background-color: rgba(0, 0, 0, 0); */
     border: 0;
     display: block;
     margin: 0;
@@ -106,10 +106,12 @@ div{
     top: 10px;
     min-width: 35px;
     width: 3%;
+    border-radius: 4px;
+    background-color: #2B060077;
 }
 #burger_menu button img{
-    width: 100%;
-    margin: 0;
+    width: 80%;
+    margin: 10%;
 }
 #burger_menu button:focus{
     outline: none;
@@ -145,3 +147,32 @@ div{
 }
 
 /* Fin burger menu */
+
+/* 3D cards */
+
+#character_cards{
+    width: 97%;
+    margin: 1,5%;
+    background-color: red;
+}
+.js-card_container{
+    float: left;
+    padding: 0;
+    width: 31%;
+    border-radius: 5px;
+    border: solid #F5A0A0FF 2px;
+    /* min-width: 300px; */
+    margin: 0.5% 1%;
+    perspective: 1500px;
+}
+.js-card3D{
+    border-radius: 5px;
+    object-fit: cover;
+    width: 100%;
+    height: 400px;
+    margin: 0;
+    padding: 0;
+    transform-style: preserve-3d;
+}
+
+/* Fin 3D cards */

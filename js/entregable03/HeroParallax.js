@@ -1,4 +1,4 @@
-class ParallaxController {
+class HeroParallax {
 
     layers;
     transforms;

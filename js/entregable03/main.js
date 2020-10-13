@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     "use strict";
 
+    const MAX_3DCARD_DEGREES = 20;
+
     let hero_parallax_change_values = [
         // { layerID: 0, esPorcentual: true, property: "translateY", ratio: 0 },
         { layerID: 1, property: "scale", ratio: 1.5 },
@@ -11,11 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // { layerID: 5, esPorcentual: true, property: "translateY", ratio: 0 }
     ];
 
+    let cards3D = [];
 
     let hero_parallax = document.querySelector("#hero_parallax_principal");
     let parallax_layers = document.querySelectorAll(".parallax_layer");
 
-    let hero_parallax_controller = new ParallaxController(parallax_layers, hero_parallax_change_values);
+    let hero_parallax_controller = new HeroParallax(parallax_layers, hero_parallax_change_values);
 
     let position_helper = document.querySelector("#position_helper");
     let is_parallax_fixed = true;
@@ -30,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         image_size = parallax_layers[0].clientHeight;
         min_position_parallax = image_size;
         max_position_parallax = image_size * 4;
-        document.querySelector("#contenido_siguiente_a_parallax").style.margin = max_position_parallax + "px 0 0 0";
+        document.querySelector("#limit_parallax_helper").style.margin = max_position_parallax + "px 0 0 0";
 
         //Vuelve a revisar el image_size en caso de que la barra de scroll le haya robado espacio.
         image_size = parallax_layers[0].clientHeight;
@@ -82,6 +85,36 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.classList.remove("js-no_scroll");
 
         }, miliseconds);
+
+    }
+
+    let card_containers = document.querySelectorAll(".js-card_container");
+    card_containers.forEach(cc => {
+
+        let card3D = new Card3D(MAX_3DCARD_DEGREES, cc.querySelector(".js-card3D"), cc);
+        cc.addEventListener("mouseover", (event) => {
+
+            cc.querySelector(".js-card3D").addEventListener("mousemove", updateCard, false);
+
+        });
+        cc.addEventListener("mouseout", (event) => {
+
+            cc.querySelector(".js-card3D").removeEventListener("mousemove", updateCard, false);
+
+        });
+        cards3D.push(card3D);
+
+    });
+    function updateCard(mouseEvent) {
+
+        let card = false;
+        let i = 0;
+        while (i < cards3D.length && !card) {
+            let current_card = cards3D[i];
+            if (current_card && current_card.isThisCard(mouseEvent.target)) card = current_card;
+            i++;
+        }
+        if(card)card.updateCard(mouseEvent.layerX,mouseEvent.layerY)
 
     }
 
