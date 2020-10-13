@@ -2,17 +2,27 @@ class Card3D {
     max_degrees;
     card;
     card_container;
+    is_moving = true;
+    timeoutID = null;
     last_transform_values = {
         x: 0,
         y: 0,
         deg: 0
     };
-    intervalID;
     constructor(max_degrees = 90, card, card_container) {
 
         this.max_degrees = max_degrees;
         this.card = card;
         this.card_container = card_container;
+        setInterval(() => {
+            if (Math.floor(this.last_transform_values.deg) != 0 && !this.is_moving) {
+                this.last_transform_values.deg--;
+                this.setTransformData(this.last_transform_values.y, this.last_transform_values.x, this.last_transform_values.deg);
+            }
+        }, 1000 / 60);
+    }
+    setMoving(is_moving = this.is_moving) {
+        this.is_moving = is_moving;
     }
     isThisCard(card) {
         return this.card == card;
@@ -20,7 +30,7 @@ class Card3D {
     resetCard() {
         this.card.style.transform = "";
     }
-    setTransformData(x, y, deg) {
+    setTransformData(y, x, deg) {
         this.card.style.transform = "rotate3d(" + -y + "," + x + "," + 0 + "," + deg + "deg)";
     }
 
@@ -45,16 +55,9 @@ class Card3D {
         this.setTransformData(new_ratios.y, new_ratios.x, new_degrees);
 
     }
-    animateResetCard(miliseconds = 1000) {
-        setTimeout(() => {
-            this.intervalID = setInterval(() => {
-                if (this.last_transform_values.deg <= 0) clearInterval(this.intervalID);
-                else {
-                    this.last_transform_values.deg--;
-                    this.setTransformData(this.last_transform_values.y, this.last_transform_values.x, this.last_transform_values.deg);
-                }
-            }, 1000 / 60);
-        }, miliseconds);
+    animateResetCard() {
+        this.is_moving = false;
     }
+
 
 }

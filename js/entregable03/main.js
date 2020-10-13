@@ -94,6 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let card3D = new Card3D(MAX_3DCARD_DEGREES, cc.querySelector(".js-card3D"), cc);
         cc.addEventListener("mouseover", (event) => {
 
+            let card = buscar3DCard(event.target);
+            if(card) card.setMoving(true);
             cc.addEventListener("mousemove", updateCard, false);
 
         });
@@ -101,7 +103,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             cc.removeEventListener("mousemove", updateCard, false);
             let card = buscar3DCard(event.target);
-            if(card) card.animateResetCard();
+            if(card) {
+                card.setMoving(false);
+                card.animateResetCard();
+            }
 
         });
         cards3D.push(card3D);

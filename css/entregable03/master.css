@@ -165,6 +165,9 @@ div{
     margin: 0.5% 1%;
     perspective: 1500px;
 }
+#character_cards:hover .js-card3D{
+    transition: transform .06 ease-in;
+}
 .js-card3D{
     border-radius: 5px;
     object-fit: cover;
