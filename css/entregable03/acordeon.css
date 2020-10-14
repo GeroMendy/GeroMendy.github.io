@@ -1,0 +1,112 @@
+.acordeon{
+    position: relative;
+    width: 94%;
+    margin: 1%;
+    background-color: #CF2F2FFF;
+    padding: 2%;
+}
+.acordeon,.acordeon *{
+    border-radius: 5px;
+}
+.acordeon_hidden_content{
+    color: #2B0600FF;
+    overflow: hidden;
+    height: auto;
+    width: 96%;
+    max-height: 15px;
+    padding: 2%;
+    margin: 3% 0;
+    border-radius: 4px;
+    background-color:#F48A8DFF;
+    transition: background-color .3s ease-in,max-height 2s ease-out;
+}
+.acordeon_hidden_content .acordeon_title{
+    float: left;
+    text-align: center;
+    width: 96%;
+    margin: 2%;
+    margin-top: 0;
+}
+.acordeon_hidden_content:first-child{
+    margin-top: 0;
+}
+.acordeon_hidden_content:last-child{
+    margin-bottom: 0;
+}
+.acordeon .acordeon_hidden_content .js-card_container{
+    width: 10%;
+    margin: 0;
+    padding: 0;
+    float: left;
+}
+.acordeon_hidden_content .js-card_container h3{
+    width: 100%;
+    float: left;
+}
+.acordeon_hidden_content p{
+    width: 75%;
+    margin: 0 0 0 2%;
+    float: right;
+}
+
+.acordeon_hidden_content:hover{
+    background-color:#FFA7A7FF;
+    height: auto;
+    max-height: 1000px;
+    overflow: show;
+    transition: background-color .3s ease-in,max-height .1.2s ease-in;
+}
+
+
+
+#burger_menu button{
+    /* background-color: rgba(0, 0, 0, 0); */
+    border: 0;
+    display: block;
+    margin: 0;
+    padding: 0;
+    z-index: 8;
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    min-width: 35px;
+    width: 3%;
+    border-radius: 4px;
+    background-color: #2B060077;
+}
+#burger_menu button img{
+    width: 80%;
+    margin: 10%;
+}
+#burger_menu button:focus{
+    outline: none;
+}
+#burger_menu button:focus + div{
+    left: 0;
+    transition: left .6s ease-out;
+}
+#burger_menu div{
+    /* margin-top: 25%;     */
+    position: fixed;
+    width: 18%;
+    height: 1000px;
+    background-color: #FFA7A7FF;
+    border-right: solid 1px #2B0600FF;
+    z-index: 9;
+    left: -19%;
+    top: 0;
+    transition: left .6s ease-in;
+}
+#burger_menu ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.burger_menu_item:first-child{
+    margin-top: 0;
+}
+.burger_menu_item{
+    width: 94%;
+    padding: 7% 3%;
+    border-bottom: solid 1px #F5A0A0FF;
+}

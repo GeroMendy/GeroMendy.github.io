@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cc.addEventListener("mouseover", (event) => {
 
             let card = buscar3DCard(event.target);
-            if(card) card.setMoving(true);
+            if (card) card.setMoving(true);
             cc.addEventListener("mousemove", updateCard, false);
 
         });
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             cc.removeEventListener("mousemove", updateCard, false);
             let card = buscar3DCard(event.target);
-            if(card) {
+            if (card) {
                 card.setMoving(false);
                 card.animateResetCard();
             }
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cards3D.push(card3D);
 
     });
-    function buscar3DCard(elem_card){
+    function buscar3DCard(elem_card) {
 
         let card = false;
         let i = 0;
@@ -127,9 +127,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateCard(mouseEvent) {
         let card = buscar3DCard(mouseEvent.target);
-        if(card)card.updateCard(mouseEvent.layerX,mouseEvent.layerY)
+        if (card) card.updateCard(mouseEvent.layerX, mouseEvent.layerY)
 
     }
+    showLoading();
 
     window.addEventListener("resize", ajustarHeightParallax);
 
