@@ -27,6 +27,9 @@
     margin: 2%;
     margin-top: 0;
 }
+.acordeon_title{
+    background-color: #F48A8DFF;
+}
 .acordeon_hidden_content:first-child{
     margin-top: 0;
 }

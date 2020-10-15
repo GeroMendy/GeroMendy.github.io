@@ -145,18 +145,23 @@ h2{
     top: 0;
     transition: left .6s ease-in;
 }
-#burger_menu ul{
+/* #burger_menu ul{
     margin: 0;
     padding: 0;
     list-style: none;
-}
+} */
 .burger_menu_item:first-child{
     margin-top: 0;
 }
 .burger_menu_item{
+    float: right;
     width: 94%;
-    padding: 7% 3%;
+    padding: 5% 3%;
+    /* background-color: black; */
     border-bottom: solid 1px #F5A0A0FF;
+    text-decoration: none;
+    text-align: center;
+    color: inherit;
 }
 
 /* Fin burger menu */
