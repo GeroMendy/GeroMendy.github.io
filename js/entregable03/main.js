@@ -31,6 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let hero_parallax = document.querySelector("#hero_parallax_principal");
     let parallax_layers = document.querySelectorAll(".parallax_layer");
+    parallax_layers[parallax_layers.length-1].addEventListener("load",()=>{
+        showLoading(0);
+    });
 
     let hero_parallax_controller = new HeroParallax(parallax_layers, hero_parallax_change_values);
 
@@ -179,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* Fin carrousel */
 
-    showLoading(/* Debug */0);
+    // showLoading(/* Debug */0);
 
     window.addEventListener("resize", ajustarHeightParallax);
 
