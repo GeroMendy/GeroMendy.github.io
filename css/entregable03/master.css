@@ -349,3 +349,19 @@ h2{
 /* Fin countdown */
 
 /* Fin footer */
+
+/* Reparto */
+
+.reparto{
+    width: 94%;
+    margin: 1% 2%;
+    background: linear-gradient(#F5A0A0FF,#FFA7A7FF);
+    border-radius: 5px;
+    list-style: none;
+    padding: 2% 1%;
+}
+.reparto li{
+    margin: 1%;
+}
+
+/* Fin reparto */
