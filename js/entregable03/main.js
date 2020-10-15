@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* Fin carrousel */
 
-    showLoading();
+    showLoading(/* Debug */0);
 
     window.addEventListener("resize", ajustarHeightParallax);
 
