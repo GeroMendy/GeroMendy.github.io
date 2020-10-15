@@ -187,3 +187,37 @@ div{
 }
 
 /* Fin 3D cards */
+
+/* Multimedia */
+.multimedia{
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* Carrusel */
+
+#carrusel{
+    margin: 2%;
+    /* margin-left: 5%; */
+    width: 680px;
+    height: 478px;
+    background-image: url("../../img/entregable03/carrusel/carr_01.jpg");
+}
+.js-carrusel_button img{
+    width: 90%;
+    padding: 200px 5% 0 5%;
+}
+.js-carrusel_button{
+    background-color: #CF2F2F77;
+    float: left;
+    align-content: center;
+    width: 10%;
+    min-height: 478px;
+}
+.js-carrusel_button:last-child{
+    float: right;
+}
+/* Carrusel */
+
+/* Fin multimedia*/

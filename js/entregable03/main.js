@@ -4,6 +4,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const MAX_3DCARD_DEGREES = 20;
 
+    const CARRUSEL_IMAGES = [
+        "../img/entregable03/carrusel/carr_01.jpg",
+        "../img/entregable03/carrusel/carr_02.jpg",
+        "../img/entregable03/carrusel/carr_03.jpg",
+        "../img/entregable03/carrusel/carr_04.jpg",
+        "../img/entregable03/carrusel/carr_05.jpg"
+    ];
+    const CARRUSEL_AUTOMATIC_TIME = 1800;
+
     let hero_parallax_change_values = [
         // { layerID: 0, esPorcentual: true, property: "translateY", ratio: 0 },
         { layerID: 1, property: "scale", ratio: 1.5 },
@@ -14,6 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     let cards3D = [];
+
+    let elem_carrusel = document.querySelector("#carrusel");
+    let carrusel = new Carrusel(elem_carrusel, CARRUSEL_IMAGES);
+    let carruselIntervalID;
+    let carruselTimeoutID = null;
 
     let hero_parallax = document.querySelector("#hero_parallax_principal");
     let parallax_layers = document.querySelectorAll(".parallax_layer");
@@ -130,6 +144,41 @@ document.addEventListener("DOMContentLoaded", () => {
         if (card) card.updateCard(mouseEvent.layerX, mouseEvent.layerY)
 
     }
+
+    /* Carrousel */
+
+
+    carruselIntervalID = setInterval(changeImageCarrusel, CARRUSEL_AUTOMATIC_TIME);
+
+    function stopIntervalCarrousel(miliseconds = 500) {
+        clearInterval(carruselIntervalID);
+        carruselIntervalID = null;
+        if (carruselTimeoutID) clearTimeout(carruselTimeoutID);
+        carruselTimeoutID = setTimeout(() => {
+            carruselTimeoutID = null;
+            carruselIntervalID = setInterval(changeImageCarrusel, CARRUSEL_AUTOMATIC_TIME)
+        }, miliseconds);
+    }
+    function changeImageCarrusel(next = true) {
+
+        if (next) carrusel.display(1);
+        else carrusel.display(-1);
+    }
+
+    let carrusel_buttons = elem_carrusel.querySelectorAll(".js-carrusel_button");
+    carrusel_buttons[0].addEventListener("click", () => {
+        changeImageCarrusel(false);
+
+        stopIntervalCarrousel();
+    });
+    carrusel_buttons[1].addEventListener("click", () => {
+        changeImageCarrusel(true);
+
+        stopIntervalCarrousel();
+    });
+
+    /* Fin carrousel */
+
     showLoading();
 
     window.addEventListener("resize", ajustarHeightParallax);
