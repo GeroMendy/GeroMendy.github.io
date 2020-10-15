@@ -37,17 +37,18 @@
     margin-bottom: 0;
 }
 .acordeon .acordeon_hidden_content .js-card_container{
-    width: 10%;
+    width: 35%;
     margin: 0;
     padding: 0;
     float: left;
+    background-color: #F7A6A6FF;
 }
 .acordeon_hidden_content .js-card_container h3{
     width: 100%;
     float: left;
 }
 .acordeon_hidden_content p{
-    width: 75%;
+    width: 60%;
     margin: 0 0 0 2%;
     float: right;
 }

@@ -179,7 +179,8 @@ h2{
     padding: 0;
     width: 31%;
     border-radius: 5px;
-    border: solid #F5A0A0FF 2px;
+    /* border: solid #320600FF 1px; */
+    background-color: #2E0600FF;
     min-width: 200px;
     margin: 0.5% 1%;
     perspective: 1500px;
@@ -204,9 +205,6 @@ h2{
     width: 100%;
     padding: 0;
     margin: 0;
-}
-.multimedia h2{
-
 }
 .trailer{
     text-align: center;
