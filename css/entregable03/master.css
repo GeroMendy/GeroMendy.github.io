@@ -276,76 +276,12 @@ h2{
     margin: 5px 4%;
     margin-bottom: 0;
 }
-
-.countdown img{
-    float: left;
-    width: 500px;
-    margin-right: 20px;
-}
-.footer_fecha_countdown{
-    float: left;
-    width: 20px;
-    height: 41px;
-    background-image: url("../../img/entregable03/tiempo_restante/0-9\(light\).png");
-}
-.footer_fecha_separador{
-    float: left;
-    width: 13px;
-    height: 41px;
-    background-image: url("../../img/entregable03/tiempo_restante/separador_tiempo\(light\).png");
+.countdown p{
+    color: #CF2F2FFF;
 }
 
-/* Animaciones del reloj */
-.footer_horas.countdown_unidad{
-    animation: numbers24to0unidades infinite steps(24) 86400s;
-    animation-delay: -3540s;
-}
-.footer_horas.countdown_decena{
-    animation: numbers24to0decenas infinite steps(24) 86400s;
-    animation-delay: -7140s;
-    /* animation-delay: ; */
-}
-.footer_minutos.countdown_unidad{
-    animation: numbers9to0 infinite steps(10) 600s;
-
-}
-.footer_minutos.countdown_decena{
-    animation: numbers6to0 infinite steps(6) 3600s;
-    animation-delay: 60s;
-}
-.footer_segundos.countdown_unidad{
-    animation: numbers9to0 infinite steps(10) 10s;
-}
-.footer_segundos.countdown_decena{
-    animation: numbers6to0 infinite steps(6) 60s;
-    animation-delay: 1s;
-}
-
-@keyframes numbers9to0{
-    0%{background-position-y: 0;}
-    100%{background-position-y:405px}
-}
-@keyframes numbers24to0decenas{
-    0%{background-position-y: -82px;}
-    20.8333333332%{background-position-y:-82px}
-    20.8333333333%{background-position-y: -41px}
-    62.49999999999%{background-position-y:-41px}
-    62.5%{background-position-y:0px}
-    100%{background-position-y:0px}
-
-}
-@keyframes numbers6to0{
-    0%{background-position-y:-203px}
-    100%{background-position-y: 41px;}
-}
-@keyframes numbers24to0unidades{
-    0%{background-position-y:-122px}
-    100%{background-position-y:851px}
-}
-/* Fin animaciones del reloj */
 
 /* Fin countdown */
-
 /* Fin footer */
 
 /* Reparto */

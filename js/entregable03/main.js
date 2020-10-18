@@ -182,6 +182,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* Fin carrousel */
 
+    /* Actualizar reloj */
+
+    function actualizarReloj() {
+        let reloj = document.querySelector(".countdown").querySelector("p");
+        let horario_actual = new Date();
+        let horario_limite = new Date(2021, 9, 22, 27, 50, 0);
+        let horario_restante = new Date(horario_limite.getTime() - horario_actual.getTime());
+
+        let dias = horario_restante.getDate();
+        let mes = horario_restante.getMonth();
+        for (mes; mes >= 0; mes--) {
+            dias += getCantDiasEnMes(mes);
+        }
+        dias += getCantDiasEnAnio(1, 0);
+        let horas = horario_restante.getHours();
+        let minutos = horario_restante.getMinutes();
+        let segundos = horario_restante.getSeconds();
+
+        let text = "Tiempo restante para la secuela: " + dias + " Días, " + horas + " Horas, " + minutos + " Minutos y " + segundos + " Segundos.";
+        reloj.innerHTML = text;
+
+    }
+    function getCantDiasEnMes(mes = 0, bisiesto = false) {
+        let dias = 0;
+        switch (mes) {
+            case 0, 2, 4, 6, 7, 9, 11:
+                dias = 31;
+                break;
+            case 1:
+                if (bisiesto) dias = 29;
+                else dias = 28;
+                break;
+            case 3, 5, 8, 10:
+                dias = 30;
+                break;
+        }
+        return dias;
+    }
+    function getCantDiasEnAnio(cant_anios = 1, cant_bisiestos = 0) {
+        let dias = 365 * cant_anios;
+        dias += cant_bisiestos;
+        return dias;
+    }
+    /* Fin actualizar reloj */
+
+    // actualizarReloj();
+    setInterval(actualizarReloj, 1000);
+
     showLoading(3000);
 
     window.addEventListener("resize", ajustarHeightParallax);
