@@ -334,3 +334,52 @@ h2{
 
 
 /* Fin sinopsis */
+
+/* Comentarios */
+
+.comentario_individual{
+    border: solid #2B0600FF 1px;
+    padding: 0.1% 1%;
+    border-radius: 4px;
+    background-color: #FFA7A7FF;
+    width: 98%;
+    display: grid;
+    grid-template: 40px 100%/100%;
+    margin-bottom: 4px;
+}
+.comentario_individual .com_titulo{
+    font-size: large;
+    padding-left: 3px;
+}
+.comentarios_form{
+    display: grid;
+    grid-template: 8% 25px 8% 150px 10%/100%;
+}
+.js-comentario_input{
+    background-color: white;
+    transition: background-color .3s ease-in;
+    box-shadow: none;
+    border-radius: 6px;
+    border: solid #2B0600FF 1px;
+    padding: 2px;
+    font-family: inherit;
+}
+.js-comentario_input::placeholder{
+    font-family: sans-serif;
+    color: #CF2F2FFF;
+    transition: color .3s ease-in;
+}
+
+.js-comentario_input:focus{
+    background-color: #FFCFCFFF;
+    transition: background-color .3s ease-out;
+    box-shadow: none;
+    /* border:inherit; */
+    outline: inherit;
+}
+.js-comentario_input:focus::placeholder{
+    color: #2B0600FF;
+    transition: color .3s ease-out;
+}
+
+/* Fin comentarios */
