@@ -286,16 +286,51 @@ h2{
 
 /* Reparto */
 
-.reparto{
+.reparto, .premios{
     width: 94%;
-    margin: 1% 2%;
+    margin: 1%;
+    display: grid;
+    grid-template: auto/100%;
     background: linear-gradient(#F5A0A0FF,#FFA7A7FF);
     border-radius: 5px;
     list-style: none;
-    padding: 2% 1%;
+    padding: 2%;
 }
-.reparto li{
-    margin: 1%;
+.reparto li,.premios li{
+    display: flex;
+    justify-self: start;
+    align-self: middle;
 }
 
 /* Fin reparto */
+/* Sinopsis */
+
+.sinopsis{
+    position: relative;
+    border-radius: 4px;
+    margin: 2%;
+    height: 100%;
+    background-color: #FFA7A7FF;
+    padding: 2%;
+    background-size: contain;
+    overflow: visible;
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 65% 35%;
+    /* clear: both; */
+}
+.sinopsis p{
+    /* width: 60%; */
+    color: black;
+    float: left;
+}
+.sinopsis img{
+    position: relative;
+    border-radius: 4px;
+    margin: 1%;
+    width: 98%;
+    float: right;
+}
+
+
+/* Fin sinopsis */
