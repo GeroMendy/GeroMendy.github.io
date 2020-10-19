@@ -286,7 +286,7 @@ h2{
 
 /* Reparto */
 
-.reparto, .premios{
+.reparto, .premios,.articulo{
     width: 94%;
     margin: 1%;
     display: grid;
