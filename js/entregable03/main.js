@@ -90,21 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
         hero_parallax_controller.changeParallaxValues(pos_ratio);
     }
 
-    function showLoading(miliseconds = 3000) {
-
-        let load_screen = document.querySelector("#pantalla_carga");
-        load_screen.classList.remove("js-hide");
-        document.body.classList.add("js-no_scroll");
-
-        setTimeout(() => {
-
-            load_screen.classList.add("js-hide");
-            document.body.classList.remove("js-no_scroll");
-
-        }, miliseconds);
-
-    }
-
     let card_containers = document.querySelectorAll(".js-card_container");
     card_containers.forEach(cc => {
 
@@ -229,8 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // actualizarReloj();
     setInterval(actualizarReloj, 1000);
-
-    showLoading(3000);
 
     window.addEventListener("resize", ajustarHeightParallax);
 
