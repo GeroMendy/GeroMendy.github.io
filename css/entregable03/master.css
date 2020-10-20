@@ -185,9 +185,20 @@ h2{
     margin: 0.5% 1%;
     perspective: 1500px;
 }
-#character_cards:hover .js-card3D{
-    transition: transform .06 ease-in;
+.js-sinopsis_card_container{
+    /* float: left; */
+    padding: 0;
+    width: 100%;
+    border-radius: 5px;
+    /* border: solid #320600FF 1px; */
+    /* background-color: #2E0600FF; */
+    /* min-width: 200px; */
+    /* margin: 0.5% 1%; */
+    perspective: 1500px;
 }
+/* #character_cards:hover .js-card3D{
+    transition: transform .06 ease-in;
+} */
 .js-card3D{
     border-radius: 5px;
     object-fit: cover;
@@ -380,6 +391,28 @@ h2{
 .js-comentario_input:focus::placeholder{
     color: #2B0600FF;
     transition: color .3s ease-out;
+}
+#js-enviar_comentario{
+    background-color: #FFCFCFFF;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+}
+#js-enviar_comentario_progress_bar{
+    background-color: #CF2F2FFF;
+    position: absolute;
+    height: 50px;
+    width: 0;
+    top: 0;
+    left: 0;
+}
+.js-boton_simular_carga{
+    
+    animation: simular_barra_progreso_form_comentarios 5s ease-out infinite;
+}
+@keyframes simular_barra_progreso_form_comentarios{
+    from{width: 0;}
+    to{width: 100%;}
 }
 
 /* Fin comentarios */
