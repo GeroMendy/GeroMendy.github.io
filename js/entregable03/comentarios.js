@@ -2,8 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let div_comentarios = document.querySelector(".js-comentarios");
     let boton_enviar = document.querySelector("#js-enviar_comentario");
+    let progress_bar = boton_enviar.querySelector("#js-enviar_comentario_progress_bar");
+
     const CSS_LOADING_CLASS_NAME = "js-boton_simular_carga";
-    const TIEMPO_CARGA_BOTON = 5000;
+    const TIEMPO_CARGA_BOTON = 2500;
+
+    progress_bar.style.animationDuration = TIEMPO_CARGA_BOTON/1000 + "s";
 
     function crearComentario(titulo, texto) {
 
@@ -17,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let inputs = document.querySelectorAll(".js-comentario_input");
         if (inputs[0].value != '' && inputs[1].value != '') {
-            mostrar_carga(boton_enviar.querySelector("#js-enviar_comentario_progress_bar"));
+            mostrar_carga(progress_bar);
             setTimeout(() => {
                 crearComentario(inputs[0].value, inputs[1].value);
                 clearInputs(inputs);

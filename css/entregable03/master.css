@@ -408,7 +408,7 @@ h2{
 }
 .js-boton_simular_carga{
     
-    animation: simular_barra_progreso_form_comentarios 5s ease-out infinite;
+    animation: simular_barra_progreso_form_comentarios ease-out infinite;
 }
 @keyframes simular_barra_progreso_form_comentarios{
     from{width: 0;}
