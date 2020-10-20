@@ -365,7 +365,7 @@ h2{
 }
 .comentarios_form{
     display: grid;
-    grid-template: 8% 25px 8% 150px 10%/100%;
+    grid-template-rows: max-content;
 }
 .js-comentario_input{
     background-color: white;
