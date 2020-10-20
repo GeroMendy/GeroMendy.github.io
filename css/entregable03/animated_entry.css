@@ -1,0 +1,27 @@
+.js-entry_animation_element{    
+    animation: animate_entry_on_scroll ease-out infinite;
+}
+.js-out_animation_element{    
+    animation: reverse animate_entry_on_scroll ease-in infinite;
+}
+.js-animated_element_on_entry{
+    /* margin-left: 0; */
+    display: grid;
+    grid-template-rows: max-content;
+    overflow-x: hidden;
+    overflow-y: show;
+
+}
+.js-entry_hidden_element{
+    /* width: 0; */
+    visibility: hidden;
+}
+
+
+@keyframes animate_entry_on_scroll{
+    0%{width: 0;
+        visibility: hidden;    
+    }
+    /* 0.0000001%{visibility: visible;} */
+    100%{width: 100%;}
+}
