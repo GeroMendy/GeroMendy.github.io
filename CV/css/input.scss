@@ -1,0 +1,122 @@
+$parallax-1-height:500px;
+
+
+
+
+// Main Primary color */
+$color-primary: #1B6C7B;
+$color-primary-lighter: #A3DAE5;  //background_primary */
+$color-primary-light: #448D9A;
+$color-primary-dark: #04404B;  //Font_prmary*/
+$color-primary-darker: #000C0E;
+
+// Main Secondary color (1) */
+$color-secondary-1: #C89628;
+$color-secondary-1-lighter: #FFE8B4;
+$color-secondary-1-light: #FACE6B;
+$color-secondary-1-dark: #795504;
+$color-secondary-1-darker: #181000;
+
+// Main Secondary color (2) */
+$color-secondary-2: #C83828;
+$color-secondary-2-lighter: #FFBBB4;
+$color-secondary-2-light: #FA796B;
+$color-secondary-2-dark: #790F04;
+$color-secondary-2-darker: #180200;
+
+
+body{
+
+  padding:0;
+  margin:0;
+
+  font-family: 'Roboto', sans-serif;
+  color: $color-primary-dark;
+  font-size: 100%;
+
+}
+
+p{
+ font-size: 1.3em;
+}
+
+
+@mixin spawning_info($background: $color-secondary-1-light){
+  position: absolute;
+  background-color:$background;
+  padding: 0.4em;
+  width: auto;
+  z-index: 10;
+  box-shadow: .3em .1em 3px 1px;
+}
+
+@mixin parallax($top: 0){
+  position: fixed;
+  width: 100%;
+  margin:0;
+  top:$top;
+  left:0;
+  z-index:1;
+}
+
+$breakpoint_phone: 480px;
+$breakpoint_tablet: 768px;
+$breakpoint_desktop: 1200px;
+
+//Hello Section*/
+.hello-section{
+  display: flexbox;
+  align-content:middle;
+
+  margin:0;
+  background-image: linear-gradient(to right, $color-primary-lighter, $color-primary-light);
+
+  @include parallax();
+  height:$parallax-1-height;
+}
+
+.hello-section div{
+
+  @include spawning_info;
+}
+
+h1{
+  font-size: 1.5em;
+  font-weight: normal;
+}
+
+h1 span{
+ font-weight: 700;
+}
+//End hello section*/
+
+
+
+@media (max-width: $breakpoint_phone){
+
+
+}
+
+@media (min-width: $breakpoint_phone) and (max-width:$breakpoint_tablet){
+
+}
+
+@media (min-width: $breakpoint_tablet){
+
+  .hello-section div{
+    $height:9em;
+    height:$height;
+/*     padding: auto 1em; */
+    right:1em;
+    top:5em;
+  }
+
+}
+
+#TESTING_bottom{
+
+  width:100%;
+  height:40px;
+  background-color: red;
+  margin-top:1000px;
+}

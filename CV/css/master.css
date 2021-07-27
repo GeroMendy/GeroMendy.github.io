@@ -1,0 +1,60 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  color: #04404B;
+  font-size: 100%;
+}
+
+p {
+  font-size: 1.3em;
+}
+
+.hello-section {
+  display: flexbox;
+  align-content: middle;
+  margin: 0;
+  background-image: linear-gradient(to right, #A3DAE5, #448D9A);
+  position: fixed;
+  width: 100%;
+  margin: 0;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  height: 500px;
+}
+
+.hello-section div {
+  position: absolute;
+  background-color: #FACE6B;
+  padding: 0.4em;
+  width: auto;
+  z-index: 10;
+  box-shadow: 0.3em 0.1em 3px 1px;
+}
+
+h1 {
+  font-size: 1.5em;
+  font-weight: normal;
+}
+
+h1 span {
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .hello-section div {
+    height: 9em;
+    /*     padding: auto 1em; */
+    right: 1em;
+    top: 5em;
+  }
+}
+#TESTING_bottom {
+  width: 100%;
+  height: 40px;
+  background-color: red;
+  margin-top: 1000px;
+}
+
+/*# sourceMappingURL=master.css.map */
